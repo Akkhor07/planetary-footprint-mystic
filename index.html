@@ -1,0 +1,474 @@
+<html>
+        <head><title>Downloaded HTML</title></head>
+        <body>
+            <pre style="white-space: pre-wrap; word-wrap: break-word;"><!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Planetary Footprint Atlas // From Earth’s Scars to Cosmic Relics</title>
+  <meta name="description" content="A unified planetary command dashboard tracking anthropogenic ecological transformation on Earth, historic lunar and Martian landing heritage under the Artemis Accords, and deep space exploration telemetry." />
+  
+  <!-- Strict Typography: Geist & Geist Mono via jsDelivr CDN -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/geist@1.3.0/dist/fonts/geist-sans/style.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/geist@1.3.0/dist/fonts/geist-mono/style.css" />
+  
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- =========================================================================
+       PROCEDURAL BACKGROUND (TERAFAB / PRESCIENCE INDUSTRIAL AMBIENT GRID)
+       ========================================================================= -->
+  <canvas id="ambient-canvas" aria-hidden="true"></canvas>
+
+  <!-- =========================================================================
+       FLOATING PILL NAVIGATION (COMPACT, CENTERED, BACKDROP-BLURRED)
+       ========================================================================= -->
+  <header class="nav-shell">
+    <nav class="nav-pill" aria-label="Command Module Navigation">
+      <div class="nav-brand">
+        <span class="status-pip" aria-hidden="true"></span>
+        <span class="nav-brand-code">PFA // COMMAND</span>
+      </div>
+
+      <div class="nav-tabs" role="tablist">
+        <button
+          type="button"
+          class="nav-tab active"
+          role="tab"
+          aria-selected="true"
+          aria-controls="panel-earth"
+          id="tab-earth"
+          data-module="earth"
+        >
+          <span class="tab-index">[01]</span>
+          <span class="tab-title">Earth: Scars</span>
+        </button>
+
+        <button
+          type="button"
+          class="nav-tab"
+          role="tab"
+          aria-selected="false"
+          aria-controls="panel-heritage"
+          id="tab-heritage"
+          data-module="heritage"
+        >
+          <span class="tab-index">[02]</span>
+          <span class="tab-title">Moon &amp; Mars: Heritage</span>
+        </button>
+
+        <button
+          type="button"
+          class="nav-tab"
+          role="tab"
+          aria-selected="false"
+          aria-controls="panel-fleet"
+          id="tab-fleet"
+          data-module="fleet"
+        >
+          <span class="tab-index">[03]</span>
+          <span class="tab-title">Deep Space: Fleet</span>
+        </button>
+      </div>
+
+      <div class="nav-clock" aria-label="Mission Elapsed Telemetry Clock">
+        <span class="clock-label">UTC //</span>
+        <span id="system-clock" class="clock-digits">00:00:00.0</span>
+      </div>
+    </nav>
+  </header>
+
+  <!-- =========================================================================
+       HERO MISSION BANNER (TERAFAB INDUSTRIAL AESTHETIC)
+       ========================================================================= -->
+  <section class="mission-header" aria-labelledby="mission-title">
+    <div class="mission-shell">
+      <div class="mission-kicker">
+        <span class="kicker-badge">HUMANITY’S SOLAR SYSTEM FOOTPRINT</span>
+        <span class="kicker-meta">NASA EARTH OBSERVATION // ARTEMIS ACCORDS SEC. 9 // DSN DEEP SPACE TELEMETRY</span>
+      </div>
+
+      <h1 id="mission-title" class="mission-title">
+        FROM EARTH’S SCARS<br />
+        TO COSMIC RELICS.
+      </h1>
+
+      <p class="mission-abstract">
+        Space exploration has always been about two perspectives: looking outward to push the frontier, and looking down at our home planet to see the truth. The Planetary Footprint Atlas unifies multidecadal satellite monitoring of anthropogenic ecological destruction on Earth, exclusionary preservation buffers protecting historic landing hardware on the Moon and Mars, and real-time telemetry from our autonomous fleet penetrating interstellar space.
+      </p>
+
+      <div class="metrics-strip">
+        <div class="metric-cell">
+          <span class="metric-id">METRIC // 01</span>
+          <span class="metric-value metric-cyan" id="metric-earth-deficit">-91.4%</span>
+          <span class="metric-desc">Aral Sea Basin Volume Loss (2000–2024)</span>
+        </div>
+        <div class="metric-cell">
+          <span class="metric-id">METRIC // 02</span>
+          <span class="metric-value metric-amber">9 RELICS</span>
+          <span class="metric-desc">Mapped Lunar &amp; Martian Historic Artifacts</span>
+        </div>
+        <div class="metric-cell">
+          <span class="metric-id">METRIC // 03</span>
+          <span class="metric-value metric-red">80.0 KM</span>
+          <span class="metric-desc">Artemis Accords Plume Standoff Threshold</span>
+        </div>
+        <div class="metric-cell">
+          <span class="metric-id">METRIC // 04</span>
+          <span class="metric-value" id="metric-voyager-dist">163.48 AU</span>
+          <span class="metric-desc">Voyager 1 Distance from Sun (~22h 40m Light Delay)</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================================
+       PRIMARY APPLICATION PANELS
+       ========================================================================= -->
+  <main class="app-stage">
+
+    <!-- =======================================================================
+         MODULE 01: EARTH SCARS (ECOLOGICAL SATELLITE COMPARATOR)
+         ======================================================================= -->
+    <section
+      id="panel-earth"
+      class="module-panel active"
+      role="tabpanel"
+      aria-labelledby="tab-earth"
+    >
+      <div class="module-bar">
+        <div class="module-bar-info">
+          <span class="module-tag">MODULE 01 // ORBITAL OBSERVATORY</span>
+          <h2 class="module-heading">EARTH SCARS: ANTHROPOGENIC LANDSCAPE COMPARATOR</h2>
+        </div>
+        <div class="module-bar-tools">
+          <span class="mono-dim">SENSOR // MULTISPECTRAL SIMULATION ENGINE</span>
+        </div>
+      </div>
+
+      <div class="module-grid earth-layout">
+        <!-- Interactive Draggable Split Viewport -->
+        <div class="stage-container">
+          <div class="stage-toolbar">
+            <div class="toolbar-state">
+              <span class="signal-dot signal-cyan"></span>
+              <span id="earth-target-title" class="toolbar-title">ARAL SEA DESICCATION (LANDSAT 5 2000 VS. TERRA 2024)</span>
+            </div>
+            <div class="case-switcher" role="group" aria-label="Select Observation Study">
+              <button type="button" class="tool-btn active" data-case="aral">Aral Sea (-91%)</button>
+              <button type="button" class="tool-btn" data-case="amazon">Amazon Rondônia</button>
+              <button type="button" class="tool-btn" data-case="mead">Lake Mead Reservoir</button>
+            </div>
+          </div>
+
+          <!-- Split-screen Draggable Container -->
+          <div
+            id="comparator-wrapper"
+            class="comparator-viewport"
+            tabindex="0"
+            role="slider"
+            aria-label="Before and after satellite imagery split view slider"
+            aria-valuemin="5"
+            aria-valuemax="95"
+            aria-valuenow="50"
+          >
+            <!-- Canvas Base (After / Degraded State) -->
+            <canvas id="canvas-earth-after" width="1000" height="560" aria-label="Current state satellite observation"></canvas>
+            
+            <!-- Canvas Overlay (Before / Baseline State clipped by width) -->
+            <div id="comparator-clip" class="comparator-clip">
+              <canvas id="canvas-earth-before" width="1000" height="560" aria-label="Baseline historic satellite observation"></canvas>
+            </div>
+
+            <!-- Draggable Divider Line & Handle -->
+            <div id="comparator-divider" class="comparator-divider">
+              <div class="divider-line"></div>
+              <div class="divider-handle" aria-hidden="true">
+                <span class="handle-arrow">&lang;</span>
+                <span class="handle-code" id="slider-percentage">50%</span>
+                <span class="handle-arrow">&rang;</span>
+              </div>
+            </div>
+
+            <div class="stage-badge stage-badge-left" id="badge-before">BASELINE // 2000</div>
+            <div class="stage-badge stage-badge-right" id="badge-after">ANTHROPOGENIC // 2024</div>
+          </div>
+
+          <div class="stage-footer">
+            <span class="mono-dim">INTERACTION // DRAG DIVIDER OR USE TOUCH TO SCRUB SATELLITE SPECTRUM</span>
+            <span class="mono-dim" id="sensor-specs">LANDSAT 5 TM &rarr; TERRA MODIS // 30M GSD</span>
+          </div>
+        </div>
+
+        <!-- Telemetry & Ecological Science HUD -->
+        <aside class="sidebar-container" aria-label="Ecological Statistics">
+          <div class="card-cell">
+            <span class="cell-label">PRIMARY ECOLOGICAL IMPACT</span>
+            <h3 id="earth-stat-headline" class="cell-title">Aralkum Desertification</h3>
+            <p id="earth-stat-body" class="cell-body">
+              Diversion of the Syr Darya and Amu Darya rivers for intensive cotton irrigation caused the Aral Sea to shrink by more than 90% of its volume, exposing over 54,000 km² of hyper-saline, toxic dust bed known as the Aralkum Desert.
+            </p>
+          </div>
+
+          <div class="card-cell">
+            <span class="cell-label">MULTISPECTRAL SATELLITE METRICS</span>
+            <div class="hud-stats-grid">
+              <div class="hud-stat-box">
+                <span class="stat-kicker">AREA CONTRACTION</span>
+                <span id="stat-area" class="stat-num metric-cyan">-86.2%</span>
+                <span class="stat-sub">From 28,000 km² to &lt;3,800 km²</span>
+              </div>
+              <div class="hud-stat-box">
+                <span class="stat-kicker">WATER DEFICIT</span>
+                <span id="stat-volume" class="stat-num metric-red">-970 km³</span>
+                <span class="stat-sub">Cumulative Lost Hydrological Mass</span>
+              </div>
+              <div class="hud-stat-box">
+                <span class="stat-kicker">SALINITY SHIFT</span>
+                <span id="stat-salinity" class="stat-num metric-amber">165 g/L</span>
+                <span class="stat-sub">From 10 g/L (Brackish) to Hyper-Saline</span>
+              </div>
+              <div class="hud-stat-box">
+                <span class="stat-kicker">OBSERVATION PLATFORM</span>
+                <span id="stat-sensor" class="stat-num">Landsat / Terra</span>
+                <span class="stat-sub">USGS/NASA Multi-Decadal Archival</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="card-cell">
+            <span class="cell-label">EARTH OBSERVATION FLEET CONTEXT</span>
+            <p class="cell-body">
+              NASA’s Earth observation fleet acts as our planet’s environmental stethoscope. Continuous monitoring via the Landsat program (since 1972) and Terra/Aqua MODIS instruments provides quantitative, unalterable proof of how industrial activity physically rewires Earth's biosystems.
+            </p>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- =======================================================================
+         MODULE 02: MOON & MARS HERITAGE PLANNER (ARTEMIS ACCORDS SIMULATOR)
+         ======================================================================= -->
+    <section
+      id="panel-heritage"
+      class="module-panel"
+      role="tabpanel"
+      aria-labelledby="tab-heritage"
+    >
+      <div class="module-bar">
+        <div class="module-bar-info">
+          <span class="module-tag">MODULE 02 // ARTIFACT PRESERVATION</span>
+          <h2 class="module-heading">ARTEMIS ACCORDS SEC. 9: REGOLITH SANDBLAST SIMULATOR</h2>
+        </div>
+        <div class="module-bar-tools">
+          <div class="body-switcher" role="group" aria-label="Select Celestial Body">
+            <button type="button" class="tool-btn active" data-body="moon">LUNA (MOON)</button>
+            <button type="button" class="tool-btn" data-body="mars">ARES (MARS)</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="module-grid heritage-layout">
+        <!-- Tactical Canvas Viewport -->
+        <div class="stage-container">
+          <div class="stage-toolbar">
+            <div class="toolbar-state">
+              <span class="signal-dot signal-amber"></span>
+              <span id="heritage-body-title" class="toolbar-title">LUNAR SURFACE TARGETING GRID // 3.5 KM/PX</span>
+            </div>
+            <div class="simulation-actions">
+              <button type="button" id="btn-demo-surveyor" class="tool-btn tool-btn-alert">
+                Replay 1969 Surveyor 3 Sandblast Event
+              </button>
+              <button type="button" id="btn-demo-compliant" class="tool-btn">
+                Plot Artemis Compliant Vector (&ge;80 km)
+              </button>
+            </div>
+          </div>
+
+          <div class="tactical-canvas-wrap">
+            <canvas id="canvas-heritage" width="1000" height="560" aria-label="Planetary tactical landing map"></canvas>
+            <div id="target-reticle" class="target-reticle" aria-hidden="true"></div>
+          </div>
+
+          <div class="stage-footer">
+            <span id="canvas-cursor-telemetry" class="mono-dim">CURSOR // HOVER OVER PLANETARY SURFACE</span>
+            <span class="mono-dim">STANDOFF RULE // 2.0 KM STATUTORY CORE // 80.0 KM PLUME ENVELOPE</span>
+          </div>
+        </div>
+
+        <!-- Telemetry HUD & Artemis Accords Rule Engine -->
+        <aside class="sidebar-container" aria-label="Mission Plume Evaluation">
+          <!-- Compliance Verdict Banner -->
+          <div class="card-cell">
+            <span class="cell-label">ARTEMIS ACCORDS RULE 9.2 VERDICT</span>
+            <div id="verdict-banner" class="verdict-banner verdict-safe">
+              <div class="verdict-status-row">
+                <span id="verdict-icon" class="verdict-glyph">&#9679;</span>
+                <h3 id="verdict-status" class="verdict-title">APPROVED // HERITAGE COMPLIANT</h3>
+              </div>
+              <p id="verdict-detail" class="verdict-detail">
+                Proposed touchdown coordinates maintain safe standoff distance from all cataloged planetary heritage sites. Supersonic plume regolith ejecta will not erode historical hardware.
+              </p>
+            </div>
+          </div>
+
+          <!-- Live Telemetry Readout -->
+          <div class="card-cell">
+            <span class="cell-label">LIVE TOUCHDOWN TELEMETRY</span>
+            <div class="hud-stats-grid">
+              <div class="hud-stat-box">
+                <span class="stat-kicker">TOUCHDOWN LAT / LON</span>
+                <span id="hud-latlon" class="stat-num mono-digits">24.50° N, 14.20° W</span>
+                <span class="stat-sub">Spherical Coordinates</span>
+              </div>
+              <div class="hud-stat-box">
+                <span class="stat-kicker">NEAREST RELIC</span>
+                <span id="hud-nearest-relic" class="stat-num metric-amber">Apollo 11</span>
+                <span class="stat-sub" id="hud-nearest-id">NSSDCA 1969-059C</span>
+              </div>
+              <div class="hud-stat-box">
+                <span class="stat-kicker">STANDOFF DISTANCE</span>
+                <span id="hud-distance" class="stat-num mono-digits metric-green">142.4 km</span>
+                <span class="stat-sub">Minimum Threshold: 80.0 km</span>
+              </div>
+              <div class="hud-stat-box">
+                <span class="stat-kicker">PLUME EXHAUST VELOCITY</span>
+                <span id="hud-plume-vel" class="stat-num mono-digits">2,420 m/s</span>
+                <span class="stat-sub">Hypervelocity Ejecta Risk: Safe</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Historical Precedent: Apollo 12 / Surveyor 3 -->
+          <div class="card-cell">
+            <span class="cell-label">HISTORICAL PRECEDENT // APOLLO 12 (1969)</span>
+            <p class="cell-body">
+              In November 1969, Apollo 12 touched down 160 meters from Surveyor 3. When Conrad and Bean retrieved the probe’s camera, electron microscope analysis at NASA revealed thousands of microscopic surface pits caused by lunar dust accelerated to 2,000+ m/s by the Lunar Module’s descent engine.
+            </p>
+          </div>
+
+          <!-- Active Heritage Inventory Matrix -->
+          <div class="card-cell">
+            <span class="cell-label">CATALOGED HERITAGE SITES MATRIX</span>
+            <div class="relic-matrix-wrap">
+              <table class="relic-table" aria-label="Cataloged landing sites proximity">
+                <thead>
+                  <tr>
+                    <th>DESIGNATOR</th>
+                    <th>HISTORIC SITE</th>
+                    <th>STANDOFF</th>
+                    <th>STATUS</th>
+                  </tr>
+                </thead>
+                <tbody id="relic-matrix-body">
+                  <!-- Populated dynamically by HeritagePlanner -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- =======================================================================
+         MODULE 03: DEEP SPACE FLEET (INTERSTELLAR & HELIOSPHERE TELEMETRY)
+         ======================================================================= -->
+    <section
+      id="panel-fleet"
+      class="module-panel"
+      role="tabpanel"
+      aria-labelledby="tab-fleet"
+    >
+      <div class="module-bar">
+        <div class="module-bar-info">
+          <span class="module-tag">MODULE 03 // INTERSTELLAR EXPEDITION</span>
+          <h2 class="module-heading">DEEP SPACE FLEET: AUTONOMOUS HELIOSPHERIC TELEMETRY</h2>
+        </div>
+        <div class="module-bar-tools">
+          <span class="mono-dim">DEEP SPACE NETWORK LOCK // GOLDSTONE • MADRID • CANBERRA</span>
+        </div>
+      </div>
+
+      <!-- Solar System Heliocentric Radar Overview -->
+      <div class="fleet-radar-section">
+        <div class="stage-container">
+          <div class="stage-toolbar">
+            <div class="toolbar-state">
+              <span class="signal-dot signal-green"></span>
+              <span class="toolbar-title">HELIOCENTRIC ORBITAL RADAR // DISTANCE &amp; ESCAPE VECTORS</span>
+            </div>
+            <span class="mono-dim">REAL-TIME SPEED-OF-LIGHT CALCULATOR ACTIVE</span>
+          </div>
+
+          <div class="radar-canvas-wrap">
+            <canvas id="canvas-radar" width="1000" height="340" aria-label="Solar system trajectory radar"></canvas>
+          </div>
+
+          <div class="stage-footer">
+            <span class="mono-dim">RADAR SCALE // LOGARITHMIC ASTRONOMICAL UNITS (1 AU = 149,597,870.7 KM)</span>
+            <span class="mono-dim">PHYSICAL CONSTANT c // 299,792.458 KM/S</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Telemetry Cards for the 4 Probes -->
+      <div class="fleet-cards-grid" id="fleet-cards-container">
+        <!-- Cards injected dynamically by FleetTelemetry with live millisecond tickers -->
+      </div>
+    </section>
+  </main>
+
+  <!-- =========================================================================
+       FOOTER & ELAYADESIGN SPECIFICATION ATTRIBUTION EMBED
+       ========================================================================= -->
+  <footer class="system-footer">
+    <div class="footer-grid">
+      <div class="footer-meta">
+        <div class="footer-brand">
+          <span class="nav-brand-code">THE PLANETARY FOOTPRINT ATLAS</span>
+          <span class="mono-dim">// NASA SPACE APPS 2026</span>
+        </div>
+        <p class="footer-copy">
+          Designed as a unified technical console bridging NASA Earth Observation, planetary archaeology, and international space policy under the Artemis Accords. 100% client-rendered with procedural canvas models, zero third-party tracking, and zero authentication gating.
+        </p>
+      </div>
+
+      <!-- Attribution Card for elayadesign/ai-design-skills -->
+      <div class="footer-repo-card">
+        <a
+          href="https://github.com/elayadesign/ai-design-skills"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="repo-embed-link"
+          aria-label="View elayadesign/ai-design-skills repository on GitHub"
+        >
+          <div class="repo-badge">
+            <svg class="github-icon" viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true">
+              <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+            </svg>
+            <span class="repo-name">elayadesign / ai-design-skills</span>
+            <span class="repo-tag">DESIGN SPECIFICATION COMPLIANT</span>
+          </div>
+          <p class="repo-desc">
+            Engineered in strict accordance with the dark-mode industrial design system, Geist typography hierarchy, zero-slop principles, and nested radius formulas.
+          </p>
+          <div class="repo-stats">
+            <span class="repo-stat-item">MIT LICENSE</span>
+            <span class="repo-stat-item">&bull;</span>
+            <span class="repo-stat-item">ZERO DEPENDENCIES</span>
+            <span class="repo-stat-item">&bull;</span>
+            <span class="repo-stat-item">ACCESSIBLE CANVAS</span>
+          </div>
+        </a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html></pre>
+        </body>
+    </html>
