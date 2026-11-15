@@ -1,3 +1,4 @@
+<img width="1892" height="827" alt="Screenshot 2026-11-16 010033" src="https://github.com/user-attachments/assets/efc49ebb-ce11-4375-ab0f-55c090ce58d8" />
 # Planetary Footprint
 
 **From Earth’s Scars to Cosmic Relics** — An interactive 3D aerospace telemetry and Earth observation web application mapping humanity’s permanent footprint across the Solar System, from anthropogenic climate scars on Earth to protected historic spacecraft across the Moon, Mars, asteroids, and interstellar space.
@@ -12,20 +13,16 @@ Built for the **NASA Space Apps Challenge**.
 
 ### 01 // Real-Time 3D Telemetry & Hardware Lab (`index.html`)
 Interactive **NASA Eyes on the Solar System** WebGL embeds paired with an official **NASA 3D Resources (`.glb`)** CAD hardware inspector, beneath a full-bleed Three.js sunlit planetary horizon and floating 3D Apollo Lunar Module hero.
+<img width="1892" height="827" alt="Screenshot 2026-11-16 010033" src="https://github.com/user-attachments/assets/f7f0bec3-54c5-4f56-a24e-c099eddc4658" />
 
-![NASA Eyes and 3D Hardware Lab](docs/screenshots/telemetry-3d-lab.png)
 
 ### 02 // NSSDCA Cosmic Relics & 3D Plume Simulator (`relics.html`)
 Browse **13 cataloged NSSDCA spacecraft relics** (Moon, Mars, 433 Eros, Ceres, and interstellar space) enriched with live NASA archive photography, and simulate **Artemis Accords Section 9** landings on a 3D cratered lunar/Martian terrain with supersonic regolith ejecta particles.
-
-![Cosmic Relics and Resting Sites](docs/screenshots/cosmic-relics-archive.png)
+<img width="1896" height="900" alt="Screenshot 2026-11-16 005957" src="https://github.com/user-attachments/assets/9e91c55b-1336-44a8-92c3-670f130e5c9a" />
 
 ### 03 // Earth Scars & Satellite Observatory (`observatory.html`)
 Interactive before-and-now satellite swipe comparator tracking multi-decade and century-scale planetary transformations alongside a live **NASA Images & Video Library REST API** search engine.
-
-![Earth Scars Satellite Observatory](docs/screenshots/earth-scars-observatory.png)
-
----
+<img width="1892" height="906" alt="Screenshot 2026-11-16 010009" src="https://github.com/user-attachments/assets/b182b0d6-1a84-482b-9de7-0ee31366e9ba" />
 
 ## Key Features
 
