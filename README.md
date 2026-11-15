@@ -13,7 +13,7 @@ Built for the **NASA Space Apps Challenge**.
 
 ### 01 // Real-Time 3D Telemetry & Hardware Lab (`index.html`)
 Interactive **NASA Eyes on the Solar System** WebGL embeds paired with an official **NASA 3D Resources (`.glb`)** CAD hardware inspector, beneath a full-bleed Three.js sunlit planetary horizon and floating 3D Apollo Lunar Module hero.
-<img width="1892" height="827" alt="Screenshot 2026-11-16 010033" src="https://github.com/user-attachments/assets/f7f0bec3-54c5-4f56-a24e-c099eddc4658" />
+<img width="1900" height="908" alt="Screenshot 2026-11-16 011623" src="https://github.com/user-attachments/assets/ed3b8cc0-af56-497c-9f47-295bd1438cbb" />
 
 
 ### 02 // NSSDCA Cosmic Relics & 3D Plume Simulator (`relics.html`)
