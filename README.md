@@ -1,4 +1,4 @@
-# Planetary Footprint Atlas
+# Planetary Footprint
 
 **From Earth’s Scars to Cosmic Relics** — An interactive 3D aerospace telemetry and Earth observation web application mapping humanity’s permanent footprint across the Solar System, from anthropogenic climate scars on Earth to protected historic spacecraft across the Moon, Mars, asteroids, and interstellar space.
 
