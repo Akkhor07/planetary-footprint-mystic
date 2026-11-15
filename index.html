@@ -1,474 +1,916 @@
-<html>
-        <head><title>Downloaded HTML</title></head>
-        <body>
-            <pre style="white-space: pre-wrap; word-wrap: break-word;"><!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>The Planetary Footprint Atlas // From Earth’s Scars to Cosmic Relics</title>
-  <meta name="description" content="A unified planetary command dashboard tracking anthropogenic ecological transformation on Earth, historic lunar and Martian landing heritage under the Artemis Accords, and deep space exploration telemetry." />
-  
-  <!-- Strict Typography: Geist & Geist Mono via jsDelivr CDN -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/geist@1.3.0/dist/fonts/geist-sans/style.css" />
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/geist@1.3.0/dist/fonts/geist-mono/style.css" />
-  
+  <title>PLANETARY FOOTPRINT ATLAS // NSSDCA &amp; NASA EYES 3D TELEMETRY</title>
+  <meta name="description" content="Industrial aerospace telemetry console integrating NASA Eyes 3D WebGL, NASA 3D Resources GLB hardware models, NSSDCA spacecraft archive, and Artemis Accords plume standoff verification." />
   <link rel="stylesheet" href="style.css" />
+  <!-- Google Model-Viewer for rendering official NASA 3D Resources (.glb) meshes -->
+  <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.5.0/model-viewer.min.js"></script>
 </head>
 <body>
 
   <!-- =========================================================================
-       PROCEDURAL BACKGROUND (TERAFAB / PRESCIENCE INDUSTRIAL AMBIENT GRID)
+       TOP STRUCTURAL COMMAND BAR + LIVE SCROLL PROGRESS
        ========================================================================= -->
-  <canvas id="ambient-canvas" aria-hidden="true"></canvas>
+  <header class="sys-header">
+    <div class="sys-header__cell sys-header__brand">
+      <span class="signal-led signal-led--orange"></span>
+      <span class="sys-code">PFA // NSSDCA-3D</span>
+    </div>
 
-  <!-- =========================================================================
-       FLOATING PILL NAVIGATION (COMPACT, CENTERED, BACKDROP-BLURRED)
-       ========================================================================= -->
-  <header class="nav-shell">
-    <nav class="nav-pill" aria-label="Command Module Navigation">
-      <div class="nav-brand">
-        <span class="status-pip" aria-hidden="true"></span>
-        <span class="nav-brand-code">PFA // COMMAND</span>
-      </div>
-
-      <div class="nav-tabs" role="tablist">
-        <button
-          type="button"
-          class="nav-tab active"
-          role="tab"
-          aria-selected="true"
-          aria-controls="panel-earth"
-          id="tab-earth"
-          data-module="earth"
-        >
-          <span class="tab-index">[01]</span>
-          <span class="tab-title">Earth: Scars</span>
-        </button>
-
-        <button
-          type="button"
-          class="nav-tab"
-          role="tab"
-          aria-selected="false"
-          aria-controls="panel-heritage"
-          id="tab-heritage"
-          data-module="heritage"
-        >
-          <span class="tab-index">[02]</span>
-          <span class="tab-title">Moon &amp; Mars: Heritage</span>
-        </button>
-
-        <button
-          type="button"
-          class="nav-tab"
-          role="tab"
-          aria-selected="false"
-          aria-controls="panel-fleet"
-          id="tab-fleet"
-          data-module="fleet"
-        >
-          <span class="tab-index">[03]</span>
-          <span class="tab-title">Deep Space: Fleet</span>
-        </button>
-      </div>
-
-      <div class="nav-clock" aria-label="Mission Elapsed Telemetry Clock">
-        <span class="clock-label">UTC //</span>
-        <span id="system-clock" class="clock-digits">00:00:00.0</span>
-      </div>
+    <nav class="sys-header__nav" aria-label="Primary System Sectors">
+      <a href="#sector-eyes" class="sys-nav-link active">[01] NASA EYES 3D &amp; GLB LAB</a>
+      <a href="#sector-nssdca" class="sys-nav-link">[02] NSSDCA RELIC ARCHIVE (13)</a>
+      <a href="#sector-artemis" class="sys-nav-link">[03] ARTEMIS PLUME SIMULATOR</a>
+      <a href="#sector-earth" class="sys-nav-link">[04] EARTH OBSERVATORY &amp; API</a>
     </nav>
+
+    <div class="sys-header__cell sys-header__clock">
+      <span class="mono-dim">UTC //</span>
+      <span id="utc-readout" class="mono-bright">00:00:00.0</span>
+    </div>
+
+    <div id="scroll-progress" class="scroll-progress" aria-hidden="true"></div>
   </header>
 
   <!-- =========================================================================
-       HERO MISSION BANNER (TERAFAB INDUSTRIAL AESTHETIC)
+       LIVE 3D INTERACTIVE TELEMETRY HERO
        ========================================================================= -->
-  <section class="mission-header" aria-labelledby="mission-title">
-    <div class="mission-shell">
-      <div class="mission-kicker">
-        <span class="kicker-badge">HUMANITY’S SOLAR SYSTEM FOOTPRINT</span>
-        <span class="kicker-meta">NASA EARTH OBSERVATION // ARTEMIS ACCORDS SEC. 9 // DSN DEEP SPACE TELEMETRY</span>
-      </div>
+  <section class="hero-stage" id="hero-stage">
+    <!-- Full-bleed interactive 3D Orbital Canvas -->
+    <canvas id="hero-3d-canvas" aria-hidden="true"></canvas>
+    <div class="hero-vignette" aria-hidden="true"></div>
 
-      <h1 id="mission-title" class="mission-title">
-        FROM EARTH’S SCARS<br />
-        TO COSMIC RELICS.
-      </h1>
+    <div class="page-container hero-inner">
+      <div class="hero-grid">
+        <div class="hero-grid__main">
+          <div class="crosshair crosshair--tl">+</div>
+          <div class="crosshair crosshair--tr">+</div>
+          <div class="crosshair crosshair--bl">+</div>
+          <div class="crosshair crosshair--br">+</div>
 
-      <p class="mission-abstract">
-        Space exploration has always been about two perspectives: looking outward to push the frontier, and looking down at our home planet to see the truth. The Planetary Footprint Atlas unifies multidecadal satellite monitoring of anthropogenic ecological destruction on Earth, exclusionary preservation buffers protecting historic landing hardware on the Moon and Mars, and real-time telemetry from our autonomous fleet penetrating interstellar space.
-      </p>
+          <div class="kicker-row">
+            <span class="tag-orange">HUMANITY’S SOLAR SYSTEM FOOTPRINT</span>
+            <span class="live-stream-pill">
+              <span class="signal-led signal-led--green"></span>
+              LIVE 3D EPHEMERIS ENGINE // DRAG STAGE TO ORBIT
+            </span>
+          </div>
 
-      <div class="metrics-strip">
-        <div class="metric-cell">
-          <span class="metric-id">METRIC // 01</span>
-          <span class="metric-value metric-cyan" id="metric-earth-deficit">-91.4%</span>
-          <span class="metric-desc">Aral Sea Basin Volume Loss (2000–2024)</span>
+          <h1 class="display-title">
+            FROM EARTH’S SCARS<br />
+            TO COSMIC RELICS.
+          </h1>
+
+          <p class="hero-lead">
+            Every spacecraft launched since 1958 leaves a permanent physical signature. On Earth, orbital sensors track anthropogenic ecological transformation. On the Moon, Mars, Eros, and Ceres, inactive landers, rovers, and unpowered orbiters form protected archaeological sites governed by ballistic plume exclusion zones.
+          </p>
+
+          <div class="hero-actions">
+            <a href="#sector-eyes" class="btn-industrial btn-industrial--primary">
+              LAUNCH NASA EYES 3D TELEMETRY &rarr;
+            </a>
+            <a href="#sector-nssdca" class="btn-industrial">
+              EXPLORE NSSDCA CATALOG (1959–2026)
+            </a>
+            <a href="https://nssdc.gsfc.nasa.gov/" target="_blank" rel="noopener noreferrer" class="btn-industrial">
+              OFFICIAL NSSDCA PORTAL &#8599;
+            </a>
+          </div>
         </div>
-        <div class="metric-cell">
-          <span class="metric-id">METRIC // 02</span>
-          <span class="metric-value metric-amber">9 RELICS</span>
-          <span class="metric-desc">Mapped Lunar &amp; Martian Historic Artifacts</span>
-        </div>
-        <div class="metric-cell">
-          <span class="metric-id">METRIC // 03</span>
-          <span class="metric-value metric-red">80.0 KM</span>
-          <span class="metric-desc">Artemis Accords Plume Standoff Threshold</span>
-        </div>
-        <div class="metric-cell">
-          <span class="metric-id">METRIC // 04</span>
-          <span class="metric-value" id="metric-voyager-dist">163.48 AU</span>
-          <span class="metric-desc">Voyager 1 Distance from Sun (~22h 40m Light Delay)</span>
-        </div>
+
+        <aside class="hero-grid__right">
+          <!-- Interactive 3D Telemetry HUD Header -->
+          <div class="hero-3d-hud">
+            <div class="hero-3d-hud__top">
+              <span class="cell-index">ASTRODYNAMICS // ACTIVE PROJECTION</span>
+              <span class="mono-dim" id="hero-orbit-coords">AZ 042.8° // EL +21.4°</span>
+            </div>
+            <div class="hero-3d-hud__bars" aria-hidden="true">
+              <span></span><span></span><span></span><span></span><span></span>
+              <span></span><span></span><span></span><span></span><span></span>
+            </div>
+            <div class="hero-3d-hud__hint">
+              INTERACTIVE 3D SPACEFRAME: MOVE CURSOR OR DRAG BACKGROUND TO ROTATE ORBITAL VECTOR
+            </div>
+          </div>
+
+          <div class="hero-grid__telemetry">
+            <div class="telemetry-cell">
+              <span class="cell-index">METRIC // 01</span>
+              <span class="cell-value" id="live-voyager-au">173.120480 AU</span>
+              <span class="cell-label">VOYAGER 1 HELIOCENTRIC DISTANCE (~1 LIGHT-DAY)</span>
+            </div>
+            <div class="telemetry-cell">
+              <span class="cell-index">METRIC // 02</span>
+              <span class="cell-value">13 CATALOGED</span>
+              <span class="cell-label">PROTECTED LUNAR, MARTIAN &amp; DEEP-SPACE RELICS</span>
+            </div>
+            <div class="telemetry-cell">
+              <span class="cell-index">METRIC // 03</span>
+              <span class="cell-value">2.0 KM / 80 KM</span>
+              <span class="cell-label">ARTEMIS ACCORDS STATUTORY &amp; BALLISTIC PLUME BUFFERS</span>
+            </div>
+            <div class="telemetry-cell">
+              <span class="cell-index">METRIC // 04</span>
+              <span class="cell-value">LIVE REST API</span>
+              <span class="cell-label">CONNECTED TO IMAGES-API.NASA.GOV &amp; NASA 3D GLB</span>
+            </div>
+          </div>
+        </aside>
       </div>
     </div>
   </section>
 
   <!-- =========================================================================
-       PRIMARY APPLICATION PANELS
+       SPACIOUS MAIN CONTENT CONTAINER
        ========================================================================= -->
-  <main class="app-stage">
+  <main class="page-container main-stack">
 
     <!-- =======================================================================
-         MODULE 01: EARTH SCARS (ECOLOGICAL SATELLITE COMPARATOR)
+         SECTOR 01: REAL-TIME NASA EYES 3D WEBGL + NASA 3D RESOURCES (.GLB)
          ======================================================================= -->
-    <section
-      id="panel-earth"
-      class="module-panel active"
-      role="tabpanel"
-      aria-labelledby="tab-earth"
-    >
-      <div class="module-bar">
-        <div class="module-bar-info">
-          <span class="module-tag">MODULE 01 // ORBITAL OBSERVATORY</span>
-          <h2 class="module-heading">EARTH SCARS: ANTHROPOGENIC LANDSCAPE COMPARATOR</h2>
+    <section id="sector-eyes" class="sector-block reveal-on-scroll">
+      <div class="sector-header">
+        <div class="sector-header__left">
+          <span class="sector-index">[01 // REAL-TIME 3D VISUALIZATION]</span>
+          <h2 class="sector-title">NASA EYES WEBGL &amp; 3D HARDWARE INSPECTOR</h2>
         </div>
-        <div class="module-bar-tools">
-          <span class="mono-dim">SENSOR // MULTISPECTRAL SIMULATION ENGINE</span>
+        <div class="sector-header__right">
+          <span class="mono-dim">SOURCES: EYES.NASA.GOV // SCIENCE.NASA.GOV/3D-RESOURCES</span>
         </div>
       </div>
 
-      <div class="module-grid earth-layout">
-        <!-- Interactive Draggable Split Viewport -->
-        <div class="stage-container">
-          <div class="stage-toolbar">
-            <div class="toolbar-state">
-              <span class="signal-dot signal-cyan"></span>
-              <span id="earth-target-title" class="toolbar-title">ARAL SEA DESICCATION (LANDSAT 5 2000 VS. TERRA 2024)</span>
+      <div class="dual-3d-grid">
+        <!-- Left: Interactive NASA Eyes Live WebGL Iframe -->
+        <div class="viewport-box">
+          <div class="viewport-toolbar">
+            <div class="toolbar-title">
+              <span class="signal-led signal-led--green"></span>
+              <span id="eyes-active-label">LIVE WEBGL // NASA EYES ON THE SOLAR SYSTEM</span>
             </div>
-            <div class="case-switcher" role="group" aria-label="Select Observation Study">
-              <button type="button" class="tool-btn active" data-case="aral">Aral Sea (-91%)</button>
-              <button type="button" class="tool-btn" data-case="amazon">Amazon Rondônia</button>
-              <button type="button" class="tool-btn" data-case="mead">Lake Mead Reservoir</button>
-            </div>
+            <a
+              id="eyes-external-link"
+              href="https://eyes.nasa.gov/apps/solar-system/#/sc_voyager_1"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="toolbar-ext"
+            >
+              OPEN FULLSCREEN &#8599;
+            </a>
           </div>
 
-          <!-- Split-screen Draggable Container -->
-          <div
-            id="comparator-wrapper"
-            class="comparator-viewport"
-            tabindex="0"
-            role="slider"
-            aria-label="Before and after satellite imagery split view slider"
-            aria-valuemin="5"
-            aria-valuemax="95"
-            aria-valuenow="50"
-          >
-            <!-- Canvas Base (After / Degraded State) -->
-            <canvas id="canvas-earth-after" width="1000" height="560" aria-label="Current state satellite observation"></canvas>
-            
-            <!-- Canvas Overlay (Before / Baseline State clipped by width) -->
-            <div id="comparator-clip" class="comparator-clip">
-              <canvas id="canvas-earth-before" width="1000" height="560" aria-label="Baseline historic satellite observation"></canvas>
-            </div>
-
-            <!-- Draggable Divider Line & Handle -->
-            <div id="comparator-divider" class="comparator-divider">
-              <div class="divider-line"></div>
-              <div class="divider-handle" aria-hidden="true">
-                <span class="handle-arrow">&lang;</span>
-                <span class="handle-code" id="slider-percentage">50%</span>
-                <span class="handle-arrow">&rang;</span>
-              </div>
-            </div>
-
-            <div class="stage-badge stage-badge-left" id="badge-before">BASELINE // 2000</div>
-            <div class="stage-badge stage-badge-right" id="badge-after">ANTHROPOGENIC // 2024</div>
+          <div class="preset-strip" id="eyes-preset-strip" role="group" aria-label="NASA Eyes 3D Targets">
+            <button type="button" class="preset-btn active" data-eyes="https://eyes.nasa.gov/apps/solar-system/#/sc_voyager_1?embed=true&logo=false" data-label="VOYAGER 1 (INTERSTELLAR)">VOYAGER 1</button>
+            <button type="button" class="preset-btn" data-eyes="https://eyes.nasa.gov/apps/earth/#/satellites?embed=true&logo=false" data-label="EARTH OBSERVATION FLEET">EARTH FLEET</button>
+            <button type="button" class="preset-btn" data-eyes="https://eyes.nasa.gov/apps/solar-system/#/moon?embed=true&logo=false" data-label="THE MOON (LUNA)">MOON</button>
+            <button type="button" class="preset-btn" data-eyes="https://eyes.nasa.gov/apps/solar-system/#/mars?embed=true&logo=false" data-label="MARS ORBIT &amp; LANDERS">MARS</button>
+            <button type="button" class="preset-btn" data-eyes="https://eyes.nasa.gov/apps/solar-system/#/sc_perseverance?embed=true&logo=false" data-label="PERSEVERANCE &amp; INGENUITY">PERSEVERANCE</button>
+            <button type="button" class="preset-btn" data-eyes="https://eyes.nasa.gov/apps/solar-system/#/sc_dawn?embed=true&logo=false" data-label="DAWN (CERES UNPOWERED ORBIT)">DAWN (CERES)</button>
+            <button type="button" class="preset-btn" data-eyes="https://eyes.nasa.gov/apps/asteroids/#/433_eros?embed=true&logo=false" data-label="433 EROS (NEAR SHOEMAKER SITE)">433 EROS</button>
+            <button type="button" class="preset-btn" data-eyes="https://eyes.nasa.gov/apps/solar-system/#/sc_pioneer_10?embed=true&logo=false" data-label="PIONEER 10 (ESCAPE TRAJECTORY)">PIONEER 10</button>
+            <button type="button" class="preset-btn" data-eyes="https://eyes.nasa.gov/apps/solar-system/#/sc_kepler?embed=true&logo=false" data-label="KEPLER SPACE TELESCOPE (DRIFT ORBIT)">KEPLER</button>
           </div>
 
-          <div class="stage-footer">
-            <span class="mono-dim">INTERACTION // DRAG DIVIDER OR USE TOUCH TO SCRUB SATELLITE SPECTRUM</span>
-            <span class="mono-dim" id="sensor-specs">LANDSAT 5 TM &rarr; TERRA MODIS // 30M GSD</span>
+          <div class="iframe-stage">
+            <iframe
+              id="nasa-eyes-iframe"
+              src="https://eyes.nasa.gov/apps/solar-system/#/sc_voyager_1?embed=true&logo=false"
+              title="NASA Eyes Live 3D WebGL Visualization"
+              allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+              allowfullscreen
+            ></iframe>
+          </div>
+
+          <div class="viewport-footer">
+            <span>INTERACTION: LEFT-CLICK DRAG TO ORBIT // SCROLL TO ZOOM // RIGHT-CLICK TO PAN</span>
+            <span>ENGINE: JPL SPICE EPHEMERIS WEBGL</span>
           </div>
         </div>
 
-        <!-- Telemetry & Ecological Science HUD -->
-        <aside class="sidebar-container" aria-label="Ecological Statistics">
-          <div class="card-cell">
-            <span class="cell-label">PRIMARY ECOLOGICAL IMPACT</span>
-            <h3 id="earth-stat-headline" class="cell-title">Aralkum Desertification</h3>
-            <p id="earth-stat-body" class="cell-body">
-              Diversion of the Syr Darya and Amu Darya rivers for intensive cotton irrigation caused the Aral Sea to shrink by more than 90% of its volume, exposing over 54,000 km² of hyper-saline, toxic dust bed known as the Aralkum Desert.
-            </p>
-          </div>
-
-          <div class="card-cell">
-            <span class="cell-label">MULTISPECTRAL SATELLITE METRICS</span>
-            <div class="hud-stats-grid">
-              <div class="hud-stat-box">
-                <span class="stat-kicker">AREA CONTRACTION</span>
-                <span id="stat-area" class="stat-num metric-cyan">-86.2%</span>
-                <span class="stat-sub">From 28,000 km² to &lt;3,800 km²</span>
-              </div>
-              <div class="hud-stat-box">
-                <span class="stat-kicker">WATER DEFICIT</span>
-                <span id="stat-volume" class="stat-num metric-red">-970 km³</span>
-                <span class="stat-sub">Cumulative Lost Hydrological Mass</span>
-              </div>
-              <div class="hud-stat-box">
-                <span class="stat-kicker">SALINITY SHIFT</span>
-                <span id="stat-salinity" class="stat-num metric-amber">165 g/L</span>
-                <span class="stat-sub">From 10 g/L (Brackish) to Hyper-Saline</span>
-              </div>
-              <div class="hud-stat-box">
-                <span class="stat-kicker">OBSERVATION PLATFORM</span>
-                <span id="stat-sensor" class="stat-num">Landsat / Terra</span>
-                <span class="stat-sub">USGS/NASA Multi-Decadal Archival</span>
-              </div>
+        <!-- Right: Official NASA 3D Resources (.GLB) Mesh Inspector -->
+        <div class="viewport-box">
+          <div class="viewport-toolbar">
+            <div class="toolbar-title">
+              <span class="signal-led signal-led--orange"></span>
+              <span id="glb-active-label">3D CAD MESH // APOLLO LUNAR MODULE</span>
             </div>
+            <a
+              id="glb-source-link"
+              href="https://science.nasa.gov/3d-resources/"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="toolbar-ext"
+            >
+              NASA 3D RESOURCES &#8599;
+            </a>
           </div>
 
-          <div class="card-cell">
-            <span class="cell-label">EARTH OBSERVATION FLEET CONTEXT</span>
-            <p class="cell-body">
-              NASA’s Earth observation fleet acts as our planet’s environmental stethoscope. Continuous monitoring via the Landsat program (since 1972) and Terra/Aqua MODIS instruments provides quantitative, unalterable proof of how industrial activity physically rewires Earth's biosystems.
-            </p>
+          <div class="preset-strip" id="glb-preset-strip" role="group" aria-label="NASA 3D GLB Hardware Models">
+            <button
+              type="button"
+              class="preset-btn active"
+              data-glb="https://raw.githubusercontent.com/nasa/NASA-3D-Resources/master/3D%20Models/Apollo%20Lunar%20Module/Apollo%20Lunar%20Module.glb"
+              data-title="3D CAD MESH // APOLLO LUNAR MODULE (NSSDCA 1969-059C)"
+              data-desc="The descent stages of six Apollo Lunar Modules remain permanently on the Moon as historic launch pads and monuments."
+            >
+              APOLLO LM
+            </button>
+            <button
+              type="button"
+              class="preset-btn"
+              data-glb="https://raw.githubusercontent.com/nasa/NASA-3D-Resources/master/3D%20Models/Dawn/Dawn.glb"
+              data-title="3D CAD MESH // DAWN SPACECRAFT (CERES ORBIT RELIC)"
+              data-desc="Dawn mapped protoplanet Vesta and dwarf planet Ceres before depleting its hydrazine in 2018. It remains in a perpetual unpowered orbit around Ceres."
+            >
+              DAWN PROBE
+            </button>
+            <button
+              type="button"
+              class="preset-btn"
+              data-glb="https://raw.githubusercontent.com/nasa/NASA-3D-Resources/master/3D%20Models/Cassini%20Assembly/Cassini%20Assembly.glb"
+              data-title="3D CAD MESH // CASSINI-HUYGENS ASSEMBLY"
+              data-desc="Explored Saturn for 13 years and landed the Huygens probe on Titan (most distant human landing footprint) before deliberate atmospheric entry."
+            >
+              CASSINI-HUYGENS
+            </button>
+            <button
+              type="button"
+              class="preset-btn"
+              data-glb="https://raw.githubusercontent.com/nasa/NASA-3D-Resources/master/3D%20Models/70-meter%20Dish/70%20meter%20dish.glb"
+              data-title="3D CAD MESH // 70-METER DEEP SPACE NETWORK ANTENNA"
+              data-desc="230-foot (70-meter) DSN dishes at Goldstone, Madrid, and Canberra maintain telemetry lock with Voyager 1 & 2 across interstellar space."
+            >
+              DSN 70M DISH
+            </button>
+            <button
+              type="button"
+              class="preset-btn"
+              data-glb="https://raw.githubusercontent.com/nasa/NASA-3D-Resources/master/3D%20Models/1999%20RQ36%20asteroid/1999%20RQ36%20asteroid.glb"
+              data-title="3D SHAPE MODEL // ASTEROID 1999 RQ36 (BENNU)"
+              data-desc="Radar and laser altimetry 3D shape model of carbon-rich asteroid Bennu, sampled by OSIRIS-REx in October 2020."
+            >
+              ASTEROID BENNU
+            </button>
           </div>
-        </aside>
+
+          <div class="model-stage">
+            <model-viewer
+              id="nasa-model-viewer"
+              src="https://raw.githubusercontent.com/nasa/NASA-3D-Resources/master/3D%20Models/Apollo%20Lunar%20Module/Apollo%20Lunar%20Module.glb"
+              alt="Official NASA 3D Spacecraft Hardware Model"
+              auto-rotate
+              camera-controls
+              shadow-intensity="1"
+              exposure="1.1"
+              interaction-prompt="none"
+            ></model-viewer>
+          </div>
+
+          <div class="viewport-footer">
+            <span id="glb-description">The descent stages of six Apollo Lunar Modules remain permanently on the Moon as historic launch pads and monuments.</span>
+          </div>
+        </div>
       </div>
     </section>
 
     <!-- =======================================================================
-         MODULE 02: MOON & MARS HERITAGE PLANNER (ARTEMIS ACCORDS SIMULATOR)
+         SECTOR 02: NSSDCA DEFINITIVE SPACECRAFT & RELIC ARCHIVE
          ======================================================================= -->
-    <section
-      id="panel-heritage"
-      class="module-panel"
-      role="tabpanel"
-      aria-labelledby="tab-heritage"
-    >
-      <div class="module-bar">
-        <div class="module-bar-info">
-          <span class="module-tag">MODULE 02 // ARTIFACT PRESERVATION</span>
-          <h2 class="module-heading">ARTEMIS ACCORDS SEC. 9: REGOLITH SANDBLAST SIMULATOR</h2>
+    <section id="sector-nssdca" class="sector-block reveal-on-scroll">
+      <div class="sector-header">
+        <div class="sector-header__left">
+          <span class="sector-index">[02 // NSSDCA.GSFC.NASA.GOV MASTER CATALOG]</span>
+          <h2 class="sector-title">COSMIC RELICS &amp; TERMINAL RESTING PLACES</h2>
         </div>
-        <div class="module-bar-tools">
-          <div class="body-switcher" role="group" aria-label="Select Celestial Body">
-            <button type="button" class="tool-btn active" data-body="moon">LUNA (MOON)</button>
-            <button type="button" class="tool-btn" data-body="mars">ARES (MARS)</button>
-          </div>
+
+        <div class="filter-bar" id="nssdca-filter-bar" role="group" aria-label="Filter NSSDCA Relics by Domain">
+          <button type="button" class="filter-btn active" data-domain="all">ALL DOMAINS (13)</button>
+          <button type="button" class="filter-btn" data-domain="moon">THE MOON (4)</button>
+          <button type="button" class="filter-btn" data-domain="mars">MARS (5)</button>
+          <button type="button" class="filter-btn" data-domain="deepspace">ASTEROIDS &amp; DEEP SPACE (4)</button>
         </div>
       </div>
 
-      <div class="module-grid heritage-layout">
-        <!-- Tactical Canvas Viewport -->
-        <div class="stage-container">
-          <div class="stage-toolbar">
-            <div class="toolbar-state">
-              <span class="signal-dot signal-amber"></span>
-              <span id="heritage-body-title" class="toolbar-title">LUNAR SURFACE TARGETING GRID // 3.5 KM/PX</span>
+      <div class="nssdca-grid" id="nssdca-cards-container">
+        <!-- Populated dynamically from verified NSSDCA dataset in app.js -->
+      </div>
+    </section>
+
+    <!-- =======================================================================
+         SECTOR 03: ARTEMIS ACCORDS SECTION 9 BALLISTIC PLUME SIMULATOR
+         ======================================================================= -->
+    <section id="sector-artemis" class="sector-block reveal-on-scroll">
+      <div class="sector-header">
+        <div class="sector-header__left">
+          <span class="sector-index">[03 // PLANETARY HERITAGE PROTECTION ENGINE]</span>
+          <h2 class="sector-title">ARTEMIS ACCORDS REGOLITH SANDBLASTING SIMULATOR</h2>
+        </div>
+        <div class="filter-bar" id="artemis-body-switch">
+          <button type="button" class="filter-btn active" data-surface="moon">LUNA SURFACE (3.5 KM/PX)</button>
+          <button type="button" class="filter-btn" data-surface="mars">MARS SURFACE (6.8 KM/PX)</button>
+        </div>
+      </div>
+
+      <div class="artemis-layout">
+        <div class="artemis-map-cell">
+          <div class="viewport-toolbar">
+            <div class="toolbar-title">
+              <span class="signal-led signal-led--orange"></span>
+              <span id="artemis-map-title">ORBITAL TARGETING GRID // CLICK ANYWHERE TO TEST DESCENT VECTOR</span>
             </div>
-            <div class="simulation-actions">
-              <button type="button" id="btn-demo-surveyor" class="tool-btn tool-btn-alert">
-                Replay 1969 Surveyor 3 Sandblast Event
+            <div class="toolbar-actions">
+              <button type="button" id="sim-apollo12-case" class="micro-action micro-action--alert">
+                REPLAY 1969 APOLLO 12 / SURVEYOR 3 SANDBLASTING
               </button>
-              <button type="button" id="btn-demo-compliant" class="tool-btn">
-                Plot Artemis Compliant Vector (&ge;80 km)
+              <button type="button" id="sim-safe-case" class="micro-action">
+                PLOT COMPLIANT VECTOR (&ge;80 KM)
               </button>
             </div>
           </div>
 
           <div class="tactical-canvas-wrap">
-            <canvas id="canvas-heritage" width="1000" height="560" aria-label="Planetary tactical landing map"></canvas>
-            <div id="target-reticle" class="target-reticle" aria-hidden="true"></div>
+            <canvas id="artemis-canvas" width="920" height="500"></canvas>
           </div>
 
-          <div class="stage-footer">
-            <span id="canvas-cursor-telemetry" class="mono-dim">CURSOR // HOVER OVER PLANETARY SURFACE</span>
-            <span class="mono-dim">STANDOFF RULE // 2.0 KM STATUTORY CORE // 80.0 KM PLUME ENVELOPE</span>
+          <div class="viewport-footer">
+            <span id="artemis-cursor-readout">CURSOR: HOVER OVER ORBITAL GRID</span>
+            <span>EXCLUSION RULE: 2.0 KM STATUTORY CORE // 80.0 KM BALLISTIC EJECTA ENVELOPE</span>
           </div>
         </div>
 
-        <!-- Telemetry HUD & Artemis Accords Rule Engine -->
-        <aside class="sidebar-container" aria-label="Mission Plume Evaluation">
-          <!-- Compliance Verdict Banner -->
-          <div class="card-cell">
-            <span class="cell-label">ARTEMIS ACCORDS RULE 9.2 VERDICT</span>
-            <div id="verdict-banner" class="verdict-banner verdict-safe">
-              <div class="verdict-status-row">
-                <span id="verdict-icon" class="verdict-glyph">&#9679;</span>
-                <h3 id="verdict-status" class="verdict-title">APPROVED // HERITAGE COMPLIANT</h3>
-              </div>
-              <p id="verdict-detail" class="verdict-detail">
-                Proposed touchdown coordinates maintain safe standoff distance from all cataloged planetary heritage sites. Supersonic plume regolith ejecta will not erode historical hardware.
+        <aside class="artemis-hud-cell">
+          <div class="hud-block">
+            <span class="cell-index">COMPLIANCE VERDICT // ARTEMIS ACCORDS SEC. 9</span>
+            <div id="artemis-verdict-box" class="verdict-banner verdict-banner--ok">
+              <div class="verdict-title" id="artemis-verdict-title">APPROVED // HERITAGE SAFE</div>
+              <p class="verdict-text" id="artemis-verdict-text">
+                Proposed touchdown coordinates maintain required standoff distance from all cataloged NSSDCA artifacts.
               </p>
             </div>
           </div>
 
-          <!-- Live Telemetry Readout -->
-          <div class="card-cell">
-            <span class="cell-label">LIVE TOUCHDOWN TELEMETRY</span>
-            <div class="hud-stats-grid">
-              <div class="hud-stat-box">
-                <span class="stat-kicker">TOUCHDOWN LAT / LON</span>
-                <span id="hud-latlon" class="stat-num mono-digits">24.50° N, 14.20° W</span>
-                <span class="stat-sub">Spherical Coordinates</span>
-              </div>
-              <div class="hud-stat-box">
-                <span class="stat-kicker">NEAREST RELIC</span>
-                <span id="hud-nearest-relic" class="stat-num metric-amber">Apollo 11</span>
-                <span class="stat-sub" id="hud-nearest-id">NSSDCA 1969-059C</span>
-              </div>
-              <div class="hud-stat-box">
-                <span class="stat-kicker">STANDOFF DISTANCE</span>
-                <span id="hud-distance" class="stat-num mono-digits metric-green">142.4 km</span>
-                <span class="stat-sub">Minimum Threshold: 80.0 km</span>
-              </div>
-              <div class="hud-stat-box">
-                <span class="stat-kicker">PLUME EXHAUST VELOCITY</span>
-                <span id="hud-plume-vel" class="stat-num mono-digits">2,420 m/s</span>
-                <span class="stat-sub">Hypervelocity Ejecta Risk: Safe</span>
-              </div>
+          <div class="hud-metrics-grid">
+            <div class="hud-metric">
+              <span class="mono-dim">TOUCHDOWN LAT / LON</span>
+              <span class="mono-bright" id="artemis-latlon">14.20° N, 18.50° W</span>
+            </div>
+            <div class="hud-metric">
+              <span class="mono-dim">NEAREST NSSDCA RELIC</span>
+              <span class="mono-orange" id="artemis-nearest-relic">Apollo 12 / Surveyor 3</span>
+            </div>
+            <div class="hud-metric">
+              <span class="mono-dim">STANDOFF DISTANCE (d)</span>
+              <span class="mono-bright" id="artemis-standoff-km">245.0 km</span>
+            </div>
+            <div class="hud-metric">
+              <span class="mono-dim">EJECTA SHEET VELOCITY</span>
+              <span class="mono-bright" id="artemis-plume-vel">2,420 m/s</span>
             </div>
           </div>
 
-          <!-- Historical Precedent: Apollo 12 / Surveyor 3 -->
-          <div class="card-cell">
-            <span class="cell-label">HISTORICAL PRECEDENT // APOLLO 12 (1969)</span>
-            <p class="cell-body">
-              In November 1969, Apollo 12 touched down 160 meters from Surveyor 3. When Conrad and Bean retrieved the probe’s camera, electron microscope analysis at NASA revealed thousands of microscopic surface pits caused by lunar dust accelerated to 2,000+ m/s by the Lunar Module’s descent engine.
+          <div class="hud-block">
+            <span class="cell-index">HISTORICAL PRECEDENT // NSSDCA 1967-035A</span>
+            <p class="hud-historical-copy">
+              In November 1969, <strong>Apollo 12 (`1969-099C`)</strong> landed 160 meters from robotic lander <strong>Surveyor 3 (`1967-035A`)</strong>. Astronauts Pete Conrad and Alan Bean retrieved Surveyor 3’s television camera; laboratory analysis revealed severe surface pitting and cracking caused by high-velocity lunar regolith accelerated by Apollo 12’s descent engine plume.
             </p>
           </div>
 
-          <!-- Active Heritage Inventory Matrix -->
-          <div class="card-cell">
-            <span class="cell-label">CATALOGED HERITAGE SITES MATRIX</span>
-            <div class="relic-matrix-wrap">
-              <table class="relic-table" aria-label="Cataloged landing sites proximity">
-                <thead>
-                  <tr>
-                    <th>DESIGNATOR</th>
-                    <th>HISTORIC SITE</th>
-                    <th>STANDOFF</th>
-                    <th>STATUS</th>
-                  </tr>
-                </thead>
-                <tbody id="relic-matrix-body">
-                  <!-- Populated dynamically by HeritagePlanner -->
-                </tbody>
-              </table>
-            </div>
+          <div class="hud-block hud-block--table">
+            <span class="cell-index">SURFACE ARTIFACT PROXIMITY MATRIX</span>
+            <table class="tactical-table">
+              <thead>
+                <tr>
+                  <th>NSSDCA ID</th>
+                  <th>SITE</th>
+                  <th>STANDOFF</th>
+                </tr>
+              </thead>
+              <tbody id="artemis-matrix-body"></tbody>
+            </table>
           </div>
         </aside>
       </div>
     </section>
 
     <!-- =======================================================================
-         MODULE 03: DEEP SPACE FLEET (INTERSTELLAR & HELIOSPHERE TELEMETRY)
+         SECTOR 04: EARTH SCARS COMPARATOR & LIVE IMAGES-API.NASA.GOV ARCHIVE
          ======================================================================= -->
-    <section
-      id="panel-fleet"
-      class="module-panel"
-      role="tabpanel"
-      aria-labelledby="tab-fleet"
-    >
-      <div class="module-bar">
-        <div class="module-bar-info">
-          <span class="module-tag">MODULE 03 // INTERSTELLAR EXPEDITION</span>
-          <h2 class="module-heading">DEEP SPACE FLEET: AUTONOMOUS HELIOSPHERIC TELEMETRY</h2>
+    <section id="sector-earth" class="sector-block reveal-on-scroll">
+      <div class="sector-header">
+        <div class="sector-header__left">
+          <span class="sector-index">[04 // ANTHROPOGENIC EARTH OBSERVATION &amp; LIVE NASA MEDIA API]</span>
+          <h2 class="sector-title">ORBITAL SURFACE CHANGE &amp; LIVE NASA ARCHIVE QUERY</h2>
         </div>
-        <div class="module-bar-tools">
-          <span class="mono-dim">DEEP SPACE NETWORK LOCK // GOLDSTONE • MADRID • CANBERRA</span>
+        <div class="sector-header__right">
+          <span class="mono-dim">API ENDPOINT: HTTPS://IMAGES-API.NASA.GOV/SEARCH</span>
         </div>
       </div>
 
-      <!-- Solar System Heliocentric Radar Overview -->
-      <div class="fleet-radar-section">
-        <div class="stage-container">
-          <div class="stage-toolbar">
-            <div class="toolbar-state">
-              <span class="signal-dot signal-green"></span>
-              <span class="toolbar-title">HELIOCENTRIC ORBITAL RADAR // DISTANCE &amp; ESCAPE VECTORS</span>
+      <div class="earth-archive-grid">
+        <!-- Left: High-Contrast Multi-Spectral Satellite Comparator -->
+        <div class="viewport-box">
+          <div class="viewport-toolbar">
+            <div class="toolbar-title">
+              <span class="signal-led signal-led--orange"></span>
+              <span id="scar-active-title">SECTOR 01 // ARAL SEA DESICCATION (LANDSAT 2000 VS 2024)</span>
             </div>
-            <span class="mono-dim">REAL-TIME SPEED-OF-LIGHT CALCULATOR ACTIVE</span>
           </div>
 
-          <div class="radar-canvas-wrap">
-            <canvas id="canvas-radar" width="1000" height="340" aria-label="Solar system trajectory radar"></canvas>
+          <div class="preset-strip" id="scar-selector">
+            <button type="button" class="preset-btn active" data-scar="aral">ARAL SEA (-91% VOL)</button>
+            <button type="button" class="preset-btn" data-scar="rondonia">RONDÔNIA CANOPY (-38%)</button>
+            <button type="button" class="preset-btn" data-scar="mead">LAKE MEAD (-52M ELEV)</button>
           </div>
 
-          <div class="stage-footer">
-            <span class="mono-dim">RADAR SCALE // LOGARITHMIC ASTRONOMICAL UNITS (1 AU = 149,597,870.7 KM)</span>
-            <span class="mono-dim">PHYSICAL CONSTANT c // 299,792.458 KM/S</span>
+          <div class="scar-stage" id="scar-stage" tabindex="0" role="slider" aria-label="Before and After Satellite Slider" aria-valuemin="5" aria-valuemax="95" aria-valuenow="50">
+            <canvas id="scar-canvas" width="880" height="460"></canvas>
+            <div id="scar-divider" class="scar-divider" style="left: 50%;">
+              <div class="scar-handle">&harr;</div>
+            </div>
+          </div>
+
+          <div class="scar-metrics-row" id="scar-metrics-row">
+            <!-- Populated dynamically by EarthController -->
           </div>
         </div>
-      </div>
 
-      <!-- Telemetry Cards for the 4 Probes -->
-      <div class="fleet-cards-grid" id="fleet-cards-container">
-        <!-- Cards injected dynamically by FleetTelemetry with live millisecond tickers -->
+        <!-- Right: Live NASA Image & Video Library REST Search Engine -->
+        <div class="viewport-box">
+          <div class="viewport-toolbar">
+            <div class="toolbar-title">
+              <span class="signal-led signal-led--green"></span>
+              <span>LIVE QUERY // IMAGES.NASA.GOV REST API</span>
+            </div>
+            <span class="mono-dim" id="api-status-badge">STATUS: READY</span>
+          </div>
+
+          <form id="nasa-search-form" class="api-search-bar">
+            <input
+              type="text"
+              id="nasa-search-input"
+              class="api-input"
+              value="Apollo 11 Lunar Module"
+              placeholder="Search NASA Archive (e.g., Surveyor 3, Viking 1, Aral Sea, Ingenuity)..."
+              aria-label="Search NASA Image and Video Library"
+            />
+            <button type="submit" class="btn-industrial btn-industrial--primary">QUERY NASA API</button>
+          </form>
+
+          <div class="preset-strip" id="api-quick-tags">
+            <button type="button" class="preset-btn" data-query="Apollo 12 Surveyor 3">APOLLO 12 &amp; SURVEYOR 3</button>
+            <button type="button" class="preset-btn" data-query="Lunar Roving Vehicle">LUNAR ROVER (LRV)</button>
+            <button type="button" class="preset-btn" data-query="Viking 1 Lander Mars">VIKING 1</button>
+            <button type="button" class="preset-btn" data-query="Ingenuity Mars Helicopter">INGENUITY</button>
+            <button type="button" class="preset-btn" data-query="Aral Sea Landsat">ARAL SEA LANDSAT</button>
+            <button type="button" class="preset-btn" data-query="Rondonia deforestation">RONDÔNIA</button>
+          </div>
+
+          <div id="nasa-api-results" class="api-results-grid">
+            <!-- Populated live from https://images-api.nasa.gov/search -->
+          </div>
+        </div>
       </div>
     </section>
+
   </main>
 
   <!-- =========================================================================
-       FOOTER & ELAYADESIGN SPECIFICATION ATTRIBUTION EMBED
+       INDUSTRIAL FOOTER WITH OFFICIAL NASA RESOURCE LINKS
        ========================================================================= -->
-  <footer class="system-footer">
-    <div class="footer-grid">
-      <div class="footer-meta">
-        <div class="footer-brand">
-          <span class="nav-brand-code">THE PLANETARY FOOTPRINT ATLAS</span>
-          <span class="mono-dim">// NASA SPACE APPS 2026</span>
-        </div>
-        <p class="footer-copy">
-          Designed as a unified technical console bridging NASA Earth Observation, planetary archaeology, and international space policy under the Artemis Accords. 100% client-rendered with procedural canvas models, zero third-party tracking, and zero authentication gating.
+  <footer class="sys-footer">
+    <div class="page-container sys-footer__inner">
+      <div class="sys-footer__cell">
+        <div class="sys-code">THE PLANETARY FOOTPRINT ATLAS // SPACE APPS SUBMISSION</div>
+        <p class="footer-note">
+          Built on an industrial zero-radius structural grid inspired by Terafab.ai. Integrates live NASA Eyes WebGL telemetry, official NASA 3D Resources GLB CAD hardware, the NSSDCA Master Spacecraft Catalog, and the live NASA Images REST API.
         </p>
       </div>
 
-      <!-- Attribution Card for elayadesign/ai-design-skills -->
-      <div class="footer-repo-card">
-        <a
-          href="https://github.com/elayadesign/ai-design-skills"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="repo-embed-link"
-          aria-label="View elayadesign/ai-design-skills repository on GitHub"
-        >
-          <div class="repo-badge">
-            <svg class="github-icon" viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true">
-              <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
-            </svg>
-            <span class="repo-name">elayadesign / ai-design-skills</span>
-            <span class="repo-tag">DESIGN SPECIFICATION COMPLIANT</span>
-          </div>
-          <p class="repo-desc">
-            Engineered in strict accordance with the dark-mode industrial design system, Geist typography hierarchy, zero-slop principles, and nested radius formulas.
-          </p>
-          <div class="repo-stats">
-            <span class="repo-stat-item">MIT LICENSE</span>
-            <span class="repo-stat-item">&bull;</span>
-            <span class="repo-stat-item">ZERO DEPENDENCIES</span>
-            <span class="repo-stat-item">&bull;</span>
-            <span class="repo-stat-item">ACCESSIBLE CANVAS</span>
-          </div>
-        </a>
+      <div class="sys-footer__links">
+        <a href="https://nssdc.gsfc.nasa.gov/" target="_blank" rel="noopener noreferrer">NSSDCA MASTER ARCHIVE &#8599;</a>
+        <a href="https://science.nasa.gov/3d-resources/" target="_blank" rel="noopener noreferrer">NASA 3D RESOURCES &#8599;</a>
+        <a href="https://eyes.nasa.gov/apps/solar-system/#/home" target="_blank" rel="noopener noreferrer">NASA EYES 3D &#8599;</a>
+        <a href="https://images.nasa.gov/" target="_blank" rel="noopener noreferrer">IMAGES.NASA.GOV &#8599;</a>
       </div>
     </div>
   </footer>
 
+  <!-- Existing application logic -->
   <script src="app.js"></script>
+
+  <!-- =========================================================================
+       3D HERO TELEMETRY ENGINE & SMOOTH SCROLL ORCHESTRATOR
+       ========================================================================= -->
+  <script>
+    (function () {
+      'use strict';
+
+      const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      /* -----------------------------------------------------------------------
+         1. SMOOTH SCROLL PROGRESS BAR + SCROLL-SPY ACTIVE NAV
+         ----------------------------------------------------------------------- */
+      const progressBar = document.getElementById('scroll-progress');
+      const navLinks = Array.from(document.querySelectorAll('.sys-nav-link'));
+      const sectors = Array.from(document.querySelectorAll('.sector-block'));
+
+      function updateScrollProgress() {
+        const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+        const pct = docHeight > 0 ? Math.min(100, Math.max(0, (window.scrollY / docHeight) * 100)) : 0;
+        if (progressBar) {
+          progressBar.style.width = pct.toFixed(2) + '%';
+        }
+      }
+
+      window.addEventListener('scroll', updateScrollProgress, { passive: true });
+      updateScrollProgress();
+
+      if ('IntersectionObserver' in window && sectors.length) {
+        const spyObserver = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                const id = '#' + entry.target.id;
+                navLinks.forEach((link) => {
+                  link.classList.toggle('active', link.getAttribute('href') === id);
+                });
+              }
+            });
+          },
+          { rootMargin: '-35% 0px -50% 0px', threshold: 0.05 }
+        );
+        sectors.forEach((s) => spyObserver.observe(s));
+      }
+
+      /* -----------------------------------------------------------------------
+         2. SCROLL REVEAL + DYNAMIC CARD STAGGER OBSERVER
+         ----------------------------------------------------------------------- */
+      const revealEls = document.querySelectorAll('.reveal-on-scroll');
+
+      if ('IntersectionObserver' in window && !reducedMotion) {
+        const revealObserver = new IntersectionObserver(
+          (entries, obs) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                entry.target.classList.add('is-visible');
+                obs.unobserve(entry.target);
+              }
+            });
+          },
+          { rootMargin: '0px 0px -60px 0px', threshold: 0.08 }
+        );
+
+        revealEls.forEach((el) => revealObserver.observe(el));
+
+        // Watch dynamic grids populated by app.js so new cards glide in cleanly
+        const animateChildren = (container) => {
+          if (!container) return;
+          Array.from(container.children).forEach((child, idx) => {
+            if (!child.classList.contains('card-animate-ready')) {
+              child.classList.add('card-animate-ready');
+              child.style.setProperty('--stagger', Math.min(idx, 10));
+              requestAnimationFrame(() => {
+                requestAnimationFrame(() => child.classList.add('card-animate-in'));
+              });
+            }
+          });
+        };
+
+        ['nssdca-cards-container', 'nasa-api-results'].forEach((id) => {
+          const target = document.getElementById(id);
+          if (!target) return;
+          animateChildren(target);
+          const mo = new MutationObserver(() => animateChildren(target));
+          mo.observe(target, { childList: true });
+        });
+      } else {
+        revealEls.forEach((el) => el.classList.add('is-visible'));
+      }
+
+      /* -----------------------------------------------------------------------
+         3. LIVE 3D ORBITAL TELEMETRY CANVAS IN HERO
+         ----------------------------------------------------------------------- */
+      const heroStage = document.getElementById('hero-stage');
+      const canvas = document.getElementById('hero-3d-canvas');
+      const coordsEl = document.getElementById('hero-orbit-coords');
+      if (!canvas || !heroStage) return;
+
+      const ctx = canvas.getContext('2d');
+      let width = 0;
+      let height = 0;
+      let dpr = Math.min(window.devicePixelRatio || 1, 2);
+      let heroVisible = true;
+      let rafId = null;
+
+      // Camera & interaction state
+      let yaw = 0.65;
+      let pitch = 0.34;
+      let targetYawOffset = 0;
+      let targetPitchOffset = 0;
+      let yawOffset = 0;
+      let pitchOffset = 0;
+      let isDragging = false;
+      let dragLastX = 0;
+      let dragLastY = 0;
+      let time = 0;
+
+      function resizeCanvas() {
+        const rect = heroStage.getBoundingClientRect();
+        width = rect.width;
+        height = rect.height;
+        dpr = Math.min(window.devicePixelRatio || 1, 2);
+        canvas.width = Math.floor(width * dpr);
+        canvas.height = Math.floor(height * dpr);
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      }
+
+      resizeCanvas();
+      window.addEventListener('resize', resizeCanvas);
+
+      // Pause 3D loop when hero leaves viewport so WebGL lower down gets full GPU
+      if ('IntersectionObserver' in window) {
+        const visObs = new IntersectionObserver(
+          (entries) => {
+            heroVisible = entries[0].isIntersecting;
+            if (heroVisible && !rafId && !reducedMotion) {
+              rafId = requestAnimationFrame(render);
+            }
+          },
+          { threshold: 0.02 }
+        );
+        visObs.observe(heroStage);
+      }
+
+      // Pointer interactivity: subtle parallax + drag-to-orbit
+      heroStage.addEventListener('pointerdown', (e) => {
+        if (e.target.closest('a, button')) return;
+        isDragging = true;
+        dragLastX = e.clientX;
+        dragLastY = e.clientY;
+      });
+
+      window.addEventListener('pointerup', () => {
+        isDragging = false;
+      });
+
+      window.addEventListener('pointermove', (e) => {
+        if (isDragging) {
+          const dx = e.clientX - dragLastX;
+          const dy = e.clientY - dragLastY;
+          dragLastX = e.clientX;
+          dragLastY = e.clientY;
+          yaw += dx * 0.0055;
+          pitch = Math.max(-1.1, Math.min(1.1, pitch + dy * 0.0055));
+        } else if (heroVisible) {
+          const nx = (e.clientX / Math.max(1, window.innerWidth)) - 0.5;
+          const ny = (e.clientY / Math.max(1, window.innerHeight)) - 0.5;
+          targetYawOffset = nx * 0.25;
+          targetPitchOffset = ny * 0.16;
+        }
+      });
+
+      // Generate 3D starfield
+      const stars = Array.from({ length: 150 }, () => ({
+        x: (Math.random() - 0.5) * 1600,
+        y: (Math.random() - 0.5) * 1000,
+        z: (Math.random() - 0.5) * 1200,
+        size: 0.7 + Math.random() * 1.6,
+        alpha: 0.18 + Math.random() * 0.55
+      }));
+
+      // Active spacecraft orbital definitions
+      const satellites = [
+        { name: 'VGR-1 // 173 AU', rScale: 1.85, tiltX: 0.42, tiltZ: -0.25, speed: 0.42, phase: 0.4, color: '#ff4d00' },
+        { name: 'LRO // LUNA', rScale: 1.32, tiltX: -0.78, tiltZ: 0.35, speed: 0.75, phase: 2.1, color: '#00ff66' },
+        { name: 'DAWN // CERES', rScale: 1.56, tiltX: 0.95, tiltZ: 0.55, speed: 0.54, phase: 4.0, color: '#00e5ff' },
+        { name: 'MRO // MARS', rScale: 1.44, tiltX: -0.32, tiltZ: -0.82, speed: 0.62, phase: 5.2, color: '#ffffff' }
+      ];
+
+      // Surface relic beacon coordinates (lat/lon on planetary sphere)
+      const beacons = [
+        { lat: 0.01, lon: 0.41, label: 'APOLLO 11' },
+        { lat: -0.05, lon: -0.41, label: 'SURVEYOR 3' },
+        { lat: 0.32, lon: 1.35, label: 'JEZERO CRATER' },
+        { lat: -0.25, lon: -1.85, label: 'GALE CRATER' }
+      ];
+
+      function projectPoint(x, y, z, cx, cy, fov) {
+        const curYaw = yaw + yawOffset;
+        const curPitch = pitch + pitchOffset + Math.min(0.4, window.scrollY * 0.00045);
+
+        // Rotate around Y
+        const cosY = Math.cos(curYaw);
+        const sinY = Math.sin(curYaw);
+        const x1 = x * cosY - z * sinY;
+        const z1 = x * sinY + z * cosY;
+
+        // Rotate around X
+        const cosX = Math.cos(curPitch);
+        const sinX = Math.sin(curPitch);
+        const y2 = y * cosX - z1 * sinX;
+        const z2 = y * sinX + z1 * cosX;
+
+        const depth = fov + z2;
+        if (depth <= 40) return null;
+        const scale = fov / depth;
+
+        return {
+          x: cx + x1 * scale,
+          y: cy + y2 * scale,
+          z: z2,
+          scale: scale
+        };
+      }
+
+      function orbitPoint(radius, angle, tiltX, tiltZ) {
+        let x = Math.cos(angle) * radius;
+        let y = 0;
+        let z = Math.sin(angle) * radius;
+
+        // Tilt X
+        const cy = Math.cos(tiltX);
+        const sy = Math.sin(tiltX);
+        const y1 = y * cy - z * sy;
+        const z1 = y * sy + z * cy;
+
+        // Tilt Z
+        const cz = Math.cos(tiltZ);
+        const sz = Math.sin(tiltZ);
+        const x2 = x * cz - y1 * sz;
+        const y2 = x * sz + y1 * cz;
+
+        return { x: x2, y: y2, z: z1 };
+      }
+
+      function render() {
+        rafId = null;
+        if (!heroVisible) return;
+
+        time += 0.016;
+        if (!isDragging) {
+          yaw += 0.0022;
+        }
+        yawOffset += (targetYawOffset - yawOffset) * 0.06;
+        pitchOffset += (targetPitchOffset - pitchOffset) * 0.06;
+
+        ctx.clearRect(0, 0, width, height);
+
+        const isCompact = width < 980;
+        const cx = isCompact ? width * 0.5 : width * 0.67;
+        const cy = isCompact ? height * 0.34 : height * 0.5;
+        const radius = Math.min(width, height) * (isCompact ? 0.24 : 0.29);
+        const fov = 780;
+
+        // 1. Background Deep Space Stars
+        stars.forEach((s) => {
+          const p = projectPoint(s.x, s.y, s.z, cx, cy, fov + 300);
+          if (!p) return;
+          ctx.fillStyle = `rgba(255, 255, 255, ${s.alpha * Math.min(1, p.scale * 1.1)})`;
+          ctx.fillRect(p.x, p.y, s.size, s.size);
+        });
+
+        // 2. Soft Planetary Core Halo
+        const halo = ctx.createRadialGradient(cx, cy, radius * 0.15, cx, cy, radius * 1.9);
+        halo.addColorStop(0, 'rgba(255, 77, 0, 0.11)');
+        halo.addColorStop(0.55, 'rgba(0, 229, 255, 0.04)');
+        halo.addColorStop(1, 'rgba(0, 0, 0, 0)');
+        ctx.fillStyle = halo;
+        ctx.beginPath();
+        ctx.arc(cx, cy, radius * 1.9, 0, Math.PI * 2);
+        ctx.fill();
+
+        // 3. 3D Wireframe Globe (Meridians & Parallels)
+        const latCount = 7;
+        for (let i = 1; i < latCount; i++) {
+          const lat = -Math.PI / 2 + (i / latCount) * Math.PI;
+          const rRing = Math.cos(lat) * radius;
+          const yRing = Math.sin(lat) * radius;
+          ctx.beginPath();
+          let started = false;
+          for (let a = 0; a <= 48; a++) {
+            const lon = (a / 48) * Math.PI * 2;
+            const p = projectPoint(Math.cos(lon) * rRing, yRing, Math.sin(lon) * rRing, cx, cy, fov);
+            if (!p) { started = false; continue; }
+            if (!started) { ctx.moveTo(p.x, p.y); started = true; }
+            else ctx.lineTo(p.x, p.y);
+          }
+          ctx.strokeStyle = i === 3 ? 'rgba(255, 77, 0, 0.30)' : 'rgba(255, 255, 255, 0.10)';
+          ctx.lineWidth = i === 3 ? 1.2 : 0.8;
+          ctx.stroke();
+        }
+
+        const lonCount = 12;
+        for (let i = 0; i < lonCount; i++) {
+          const lon = (i / lonCount) * Math.PI;
+          ctx.beginPath();
+          let started = false;
+          for (let a = 0; a <= 48; a++) {
+            const theta = (a / 48) * Math.PI * 2;
+            const x = Math.cos(theta) * Math.cos(lon) * radius;
+            const y = Math.sin(theta) * radius;
+            const z = Math.cos(theta) * Math.sin(lon) * radius;
+            const p = projectPoint(x, y, z, cx, cy, fov);
+            if (!p) { started = false; continue; }
+            if (!started) { ctx.moveTo(p.x, p.y); started = true; }
+            else ctx.lineTo(p.x, p.y);
+          }
+          ctx.strokeStyle = 'rgba(255, 255, 255, 0.09)';
+          ctx.lineWidth = 0.8;
+          ctx.stroke();
+        }
+
+        // 4. Surface Artifact Beacons on the Globe
+        beacons.forEach((b, idx) => {
+          const x = Math.cos(b.lat) * Math.cos(b.lon) * radius;
+          const y = Math.sin(b.lat) * radius;
+          const z = Math.cos(b.lat) * Math.sin(b.lon) * radius;
+          const p = projectPoint(x, y, z, cx, cy, fov);
+          if (!p || p.z > 20) return;
+
+          const pulse = 3 + Math.sin(time * 3 + idx) * 1.5;
+          ctx.strokeStyle = 'rgba(255, 77, 0, 0.75)';
+          ctx.lineWidth = 1;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, pulse * 2.1, 0, Math.PI * 2);
+          ctx.stroke();
+
+          ctx.fillStyle = '#ff4d00';
+          ctx.fillRect(p.x - 2, p.y - 2, 4, 4);
+        });
+
+        // 5. Inclined 3D Orbital Rings + Active Spacecraft Nodes
+        satellites.forEach((sat) => {
+          const orbitR = radius * sat.rScale;
+
+          // Draw full orbital ellipse
+          ctx.beginPath();
+          for (let a = 0; a <= 72; a++) {
+            const ang = (a / 72) * Math.PI * 2;
+            const op = orbitPoint(orbitR, ang, sat.tiltX, sat.tiltZ);
+            const p = projectPoint(op.x, op.y, op.z, cx, cy, fov);
+            if (!p) continue;
+            if (a === 0) ctx.moveTo(p.x, p.y);
+            else ctx.lineTo(p.x, p.y);
+          }
+          ctx.strokeStyle = 'rgba(255, 255, 255, 0.13)';
+          ctx.lineWidth = 1;
+          ctx.stroke();
+
+          // Draw trailing telemetry arc
+          const currentAngle = time * sat.speed + sat.phase;
+          ctx.beginPath();
+          for (let t = 0; t <= 16; t++) {
+            const ang = currentAngle - t * 0.045;
+            const op = orbitPoint(orbitR, ang, sat.tiltX, sat.tiltZ);
+            const p = projectPoint(op.x, op.y, op.z, cx, cy, fov);
+            if (!p) continue;
+            if (t === 0) ctx.moveTo(p.x, p.y);
+            else ctx.lineTo(p.x, p.y);
+          }
+          ctx.strokeStyle = sat.color;
+          ctx.lineWidth = 2;
+          ctx.stroke();
+
+          // Active spacecraft reticle + label
+          const headOp = orbitPoint(orbitR, currentAngle, sat.tiltX, sat.tiltZ);
+          const headP = projectPoint(headOp.x, headOp.y, headOp.z, cx, cy, fov);
+          if (headP) {
+            ctx.fillStyle = sat.color;
+            ctx.beginPath();
+            ctx.arc(headP.x, headP.y, 4, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.strokeStyle = sat.color;
+            ctx.lineWidth = 1;
+            ctx.strokeRect(headP.x - 8, headP.y - 8, 16, 16);
+
+            ctx.font = '600 10px "Geist Mono", monospace';
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.85)';
+            ctx.fillText(sat.name, headP.x + 12, headP.y + 3);
+          }
+        });
+
+        // Update live HUD coordinate readout
+        if (coordsEl) {
+          const az = (((yaw + yawOffset) * 180) / Math.PI % 360 + 360) % 360;
+          const el = (((pitch + pitchOffset) * 180) / Math.PI);
+          coordsEl.textContent = `AZ ${az.toFixed(1).padStart(5, '0')}° // EL ${el >= 0 ? '+' : ''}${el.toFixed(1)}°`;
+        }
+
+        if (!reducedMotion) {
+          rafId = requestAnimationFrame(render);
+        }
+      }
+
+      if (reducedMotion) {
+        render();
+      } else {
+        rafId = requestAnimationFrame(render);
+      }
+    })();
+  </script>
 </body>
-</html></pre>
-        </body>
-    </html>
+</html>
