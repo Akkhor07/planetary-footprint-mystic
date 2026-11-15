@@ -1,4 +1,4 @@
-<img width="1892" height="827" alt="Screenshot 2026-11-16 010033" src="https://github.com/user-attachments/assets/efc49ebb-ce11-4375-ab0f-55c090ce58d8" />
+<img width="1897" height="917" alt="Screenshot 2026-11-16 011345" src="https://github.com/user-attachments/assets/43403504-63f9-4719-bb39-1996f206bab9" />
 # Planetary Footprint
 
 **From Earth’s Scars to Cosmic Relics** — An interactive 3D aerospace telemetry and Earth observation web application mapping humanity’s permanent footprint across the Solar System, from anthropogenic climate scars on Earth to protected historic spacecraft across the Moon, Mars, asteroids, and interstellar space.
