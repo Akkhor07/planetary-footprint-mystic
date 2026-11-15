@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EARTH SCARS &amp; SATELLITE OBSERVATORY // PLANETARY FOOTPRINT</title>
+  <meta name="description" content="Compare real historical vs modern NASA satellite imagery of the Aral Sea, Caspian Sea, Arctic Sea Ice, Columbia Glacier, Amazon, and Lake Mead." />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <header class="sys-header is-scrolled" id="sys-header">
+    <div class="sys-header__inner page-container">
+      <a href="index.html" class="sys-header__brand">
+        <span class="signal-led signal-led--orange"></span>
+        <span class="sys-code">PLANETARY FOOTPRINT</span>
+      </a>
+
+      <nav class="sys-header__nav" aria-label="Site Pages">
+        <a href="index.html" class="sys-nav-link">01 // 3D Telemetry</a>
+        <a href="relics.html" class="sys-nav-link">02 // Cosmic Relics &amp; Plume 3D</a>
+        <a href="observatory.html" class="sys-nav-link active">03 // Earth Scars Observatory</a>
+      </nav>
+
+      <div class="sys-header__clock">
+        <span class="mono-dim">UTC</span>
+        <span id="utc-readout" class="mono-bright">00:00:00.0</span>
+      </div>
+    </div>
+    <div id="scroll-progress" class="scroll-progress" aria-hidden="true"></div>
+  </header>
+
+  <main class="page-container main-stack page-sub-top">
+    <section class="subhero">
+      <div>
+        <span class="sector-index">PAGE 03 // CENTURY &amp; CLIMATE TRANSFORMATION</span>
+        <h1 class="subhero-title">Earth Scars &amp; Satellite Observatory</h1>
+      </div>
+      <div class="subhero-actions">
+        <a href="relics.html" class="btn-cinema btn-cinema--ghost">&larr; Page 02: Cosmic Relics</a>
+        <a href="#nasa-archive" class="btn-cinema btn-cinema--primary">NASA Media Search &darr;</a>
+      </div>
+    </section>
+
+    <!-- REAL SATELLITE BEFORE/NOW COMPARATOR -->
+    <section id="sector-earth" class="sector-block reveal-on-scroll is-visible">
+      <div class="sector-header">
+        <div class="sector-header__left">
+          <span class="sector-index">[NASA EARTH OBSERVATORY // MODIS &amp; LANDSAT]</span>
+          <h2 class="sector-title">CENTURY &amp; CLIMATE SATELLITE COMPARATOR</h2>
+        </div>
+        <div class="sector-header__right">
+          <span class="mono-dim">DRAG SLIDER TO COMPARE HISTORICAL VS PRESENT</span>
+        </div>
+      </div>
+
+      <div class="earth-archive-grid">
+        <div class="viewport-box">
+          <div class="viewport-toolbar">
+            <div class="toolbar-title">
+              <span class="signal-led signal-led--orange"></span>
+              <span id="sat-title">ARAL SEA DESICCATION // 2002 VS 2017 (1960–2024: -91.4% VOL)</span>
+            </div>
+          </div>
+
+          <div class="preset-strip" id="sat-case-tabs" role="group" aria-label="Satellite Case Studies">
+            <button type="button" class="preset-btn active" data-case="aral">ARAL SEA (-91%)</button>
+            <button type="button" class="preset-btn" data-case="caspian">CASPIAN SEA (-2M / -18M PROJ)</button>
+            <button type="button" class="preset-btn" data-case="arctic">ARCTIC SEA ICE (WARMING)</button>
+            <button type="button" class="preset-btn" data-case="columbia">COLUMBIA GLACIER (-20 KM)</button>
+            <button type="button" class="preset-btn" data-case="rondonia">RONDÔNIA AMAZON (-38%)</button>
+            <button type="button" class="preset-btn" data-case="mead">LAKE MEAD (-52M DROUGHT)</button>
+          </div>
+
+          <div class="scar-stage" id="sat-stage" tabindex="0" role="slider" aria-label="Before and Now Satellite Image Slider" aria-valuemin="2" aria-valuemax="98" aria-valuenow="50">
+            <!-- Real Satellite NOW Image (Bottom layer) -->
+            <img id="sat-img-after" class="sat-photo sat-photo--after" src="" alt="Modern satellite observation" />
+            <!-- Real Satellite BEFORE Image (Clipped top layer) -->
+            <img id="sat-img-before" class="sat-photo sat-photo--before" src="" alt="Historical satellite observation" />
+
+            <span class="scar-tag scar-tag--before" id="sat-label-before">2002 · NASA TERRA MODIS</span>
+            <span class="scar-tag scar-tag--after" id="sat-label-after">2017 · DESICCATED BASIN</span>
+
+            <div id="sat-divider" class="scar-divider" style="left: 50%;">
+              <div class="scar-handle">&harr;</div>
+            </div>
+          </div>
+
+          <div class="scar-context-bar" id="sat-summary">
+            Once Earth's 4th-largest lake, Soviet river diversions shrank the Aral Sea to ~10% of its 1960 extent, creating the new Aralkum Desert.
+          </div>
+
+          <div class="scar-metrics-row" id="sat-metrics">
+            <div class="sat-metric-cell">
+              <span class="mono-dim">HISTORICAL BASELINE</span>
+              <span class="mono-bright" id="sat-m1">68,000 KM² (1960)</span>
+            </div>
+            <div class="sat-metric-cell">
+              <span class="mono-dim">CURRENT OBSERVATION</span>
+              <span class="mono-orange" id="sat-m2">2,460 KM² (-91.4%)</span>
+            </div>
+            <div class="sat-metric-cell">
+              <span class="mono-dim">PRIMARY DRIVER</span>
+              <span class="mono-bright" id="sat-m3">IRRIGATION &amp; ARIDIFICATION</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- LIVE NASA IMAGES API ARCHIVE -->
+        <div class="viewport-box" id="nasa-archive">
+          <div class="viewport-toolbar">
+            <div class="toolbar-title">
+              <span class="signal-led signal-led--green"></span>
+              <span>LIVE NASA MEDIA ARCHIVE</span>
+            </div>
+            <span class="mono-dim" id="api-status-badge">READY</span>
+          </div>
+
+          <form id="nasa-search-form" class="api-search-bar">
+            <input
+              type="text"
+              id="nasa-search-input"
+              class="api-input"
+              value="Aral Sea Landsat"
+              placeholder="Search NASA Archive (Caspian Sea, Glacier, Aral Sea)..."
+              aria-label="Search NASA Image and Video Library"
+            />
+            <button type="submit" class="btn-industrial btn-industrial--primary">SEARCH</button>
+          </form>
+
+          <div class="preset-strip" id="api-quick-tags">
+            <button type="button" class="preset-btn" data-query="Aral Sea Landsat">ARAL SEA</button>
+            <button type="button" class="preset-btn" data-query="Caspian Sea MODIS">CASPIAN SEA</button>
+            <button type="button" class="preset-btn" data-query="Columbia Glacier Alaska">GLACIER RETREAT</button>
+            <button type="button" class="preset-btn" data-query="Arctic Sea Ice">ARCTIC ICE</button>
+            <button type="button" class="preset-btn" data-query="Rondonia deforestation">AMAZON</button>
+            <button type="button" class="preset-btn" data-query="Lake Mead drought">LAKE MEAD</button>
+          </div>
+
+          <div id="nasa-api-results" class="api-results-grid"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="sys-footer">
+    <div class="page-container sys-footer__inner">
+      <div class="sys-footer__cell">
+        <div class="sys-code">PLANETARY FOOTPRINT ATLAS</div>
+        <p class="footer-note">NASA Earth Observatory · USGS Landsat · MODIS Rapid Response · NASA Images API</p>
+      </div>
+      <div class="sys-footer__links">
+        <a href="index.html">01 TELEMETRY</a>
+        <a href="relics.html">02 COSMIC RELICS</a>
+        <a href="observatory.html">03 EARTH SCARS</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Hidden DOM compat shim for app.js -->
+  <div hidden aria-hidden="true">
+    <span id="live-voyager-au"></span>
+    <span id="eyes-active-label"></span>
+    <a id="eyes-external-link"></a>
+    <div id="eyes-preset-strip"></div>
+    <iframe id="nasa-eyes-iframe"></iframe>
+    <span id="glb-active-label"></span>
+    <a id="glb-source-link"></a>
+    <div id="glb-preset-strip"></div>
+    <div id="nasa-model-viewer"></div>
+    <span id="glb-description"></span>
+    <div id="nssdca-filter-bar"></div>
+    <div id="nssdca-cards-container"></div>
+    <div id="artemis-body-switch"></div>
+    <span id="artemis-map-title"></span>
+    <button id="sim-apollo12-case"></button>
+    <button id="sim-safe-case"></button>
+    <canvas id="artemis-canvas" width="920" height="500"></canvas>
+    <span id="artemis-cursor-readout"></span>
+    <div id="artemis-verdict-box"></div>
+    <div id="artemis-verdict-title"></div>
+    <div id="artemis-verdict-text"></div>
+    <span id="artemis-latlon"></span>
+    <span id="artemis-nearest-relic"></span>
+    <span id="artemis-standoff-km"></span>
+    <span id="artemis-plume-vel"></span>
+    <table><tbody id="artemis-matrix-body"></tbody></table>
+    <span id="scar-active-title"></span>
+    <div id="scar-selector"></div>
+    <div id="scar-stage"></div>
+    <canvas id="scar-canvas" width="880" height="460"></canvas>
+    <div id="scar-divider"></div>
+    <div id="scar-metrics-row"></div>
+  </div>
+
+  <script src="app.js"></script>
+  <script>
+    (function () {
+      const progressBar = document.getElementById('scroll-progress');
+      window.addEventListener('scroll', () => {
+        const docH = document.documentElement.scrollHeight - window.innerHeight;
+        if (progressBar) progressBar.style.width = (docH > 0 ? Math.min(100, (window.scrollY / docH) * 100) : 0).toFixed(2) + '%';
+      }, { passive: true });
+
+      // Verified NASA Earth Observatory / Wikimedia Commons Satellite Image Pairs
+      const CASES = {
+        aral: {
+          title: 'ARAL SEA DESICCATION // 2002 VS 2017 (1960–2024: -91.4% VOL)',
+          beforeImg: 'https://upload.wikimedia.org/wikipedia/commons/7/70/Aral_sea_from_space_in_2002.jpg',
+          afterImg: 'https://upload.wikimedia.org/wikipedia/commons/2/23/Aral_Sea_August_2017.jpg',
+          beforeLabel: '2002 · NASA TERRA MODIS',
+          afterLabel: '2017 · EXPOSED ARALKUM DESERT',
+          summary: 'Once Earth’s 4th-largest lake, river diversions since the 1960s reduced the Aral Sea to ~10% of its historic volume, forming the Aralkum salt desert.',
+          m1: '68,000 KM² (1960)',
+          m2: '2,460 KM² (-91.4%)',
+          m3: 'RIVER DIVERSION & HEAT'
+        },
+        caspian: {
+          title: 'CASPIAN SEA RETREAT // 2006 VS 2024 (WARMING EVAPORATION)',
+          beforeImg: 'https://assets.science.nasa.gov/dynamicimage/assets/science/esd/eo/images/imagerecords/150000/150452/caspian_amo_2006263.jpg',
+          afterImg: 'https://commons.wikimedia.org/wiki/Special:FilePath/Shrinking_Caspian_Sea_(MODIS_2024-10-08).jpg?width=1200',
+          beforeLabel: 'SEPT 2006 · TERRA MODIS',
+          afterLabel: 'SEPT 2024 · EXPOSED SALT CRUST',
+          summary: 'Earth’s largest inland sea is dropping rapidly as warmer air increases evaporation. Projections warn of a 9–18 m drop by 2100, exposing 93,000 km² of dry seabed.',
+          m1: '-27M MSL (1995 PEAK)',
+          m2: '-2.0M DROP (36K KM² RISK)',
+          m3: 'GLOBAL WARMING EVAPORATION'
+        },
+        arctic: {
+          title: 'ARCTIC SEA ICE DECLINE // 1984 VS 2016 (GLOBAL WARMING)',
+          beforeImg: 'https://upload.wikimedia.org/wikipedia/commons/0/0e/September_arctic_sea_ice_extent_and_age_for_1984.png',
+          afterImg: 'https://upload.wikimedia.org/wikipedia/commons/e/ec/Arctic_Sea_Ice_Is_Losing_Its_Bulwark_Against_Warming_Summers_%2829992498773%29.jpg',
+          beforeLabel: 'SEPT 1984 · MULTI-YEAR ICE PACK',
+          afterLabel: '2016+ · THINNED SEASONAL ICE',
+          summary: 'Arctic warming has eliminated 95% of the oldest, thickest multi-year sea ice since 1984, replacing bright reflective ice with dark heat-absorbing ocean.',
+          m1: '7.0M KM² (1980s MIN)',
+          m2: '-95% OLD THICK ICE LOST',
+          m3: 'POLAR AMPLIFICATION (+3.8×)'
+        },
+        columbia: {
+          title: 'COLUMBIA GLACIER RETREAT, ALASKA // 1986 VS 2011+ (LANDSAT)',
+          beforeImg: 'https://assets.science.nasa.gov/dynamicimage/assets/science/esd/eo/woc/images/columbia_glacier/columbia_tm5_1986209.jpg',
+          afterImg: 'https://upload.wikimedia.org/wikipedia/commons/d/d3/World_of_Change_Columbia_Glacier%2C_Alaska_%287215814492%29.png',
+          beforeLabel: 'JULY 1986 · LANDSAT 5',
+          afterLabel: '2011+ · >20 KM TERMINUS RETREAT',
+          summary: 'One of Earth’s fastest-retreating tidewater glaciers: since 1980 it has retreated over 20 km inland and lost roughly half its total ice thickness and volume.',
+          m1: 'HEATHER ISLAND (1980)',
+          m2: '-20 KM RETREAT / -50% VOL',
+          m3: 'OCEAN & AIR WARMING'
+        },
+        rondonia: {
+          title: 'RONDÔNIA AMAZON DEFORESTATION // 2000 VS 2007 (TERRA MODIS)',
+          beforeImg: 'https://upload.wikimedia.org/wikipedia/commons/3/34/Amazon_deforestation_20000730.jpg',
+          afterImg: 'https://assets.science.nasa.gov/dynamicimage/assets/science/esd/eo/images/imagerecords/38000/38782/amazon_deforestation_20070812.jpg',
+          beforeLabel: 'JULY 2000 · INTACT CANOPY',
+          afterLabel: 'AUG 2007 · FISHBONE CLEARINGS',
+          summary: 'Road networks carved characteristic fishbone clearings across Rondônia, converting carbon-rich tropical rainforest into pasture and cropland.',
+          m1: '208,000 KM² FOREST',
+          m2: '-38% CANOPY CLEARED',
+          m3: 'LOGGING & CATTLE EXPANSION'
+        },
+        mead: {
+          title: 'LAKE MEAD MEGADROUGHT // 2000 VS 2022 (LANDSAT 7 & 8)',
+          beforeImg: 'https://upload.wikimedia.org/wikipedia/commons/5/58/Lake_Mead_6_July_2000.jpg',
+          afterImg: 'https://commons.wikimedia.org/wiki/Special:FilePath/Lake_Mead_3_July_2022.jpg?width=1200',
+          beforeLabel: 'JULY 2000 · 341M ELEVATION',
+          afterLabel: 'JULY 2022 · 27% CAPACITY',
+          summary: 'Twenty-two years of climate-driven Western U.S. megadrought and over-allocation dropped Lake Mead by 52 meters, exposing bleached mineral bathtub rings.',
+          m1: '365M ELEV (FULL)',
+          m2: '317M (27% CAPACITY)',
+          m3: 'MEGADROUGHT & DEMAND'
+        }
+      };
+
+      const stage = document.getElementById('sat-stage');
+      const divider = document.getElementById('sat-divider');
+      const beforeImg = document.getElementById('sat-img-before');
+      const afterImg = document.getElementById('sat-img-after');
+      const tabs = document.getElementById('sat-case-tabs');
+      let splitPct = 50;
+
+      function applySplit(pct) {
+        splitPct = Math.max(2, Math.min(98, pct));
+        divider.style.left = splitPct + '%';
+        beforeImg.style.clipPath = `inset(0 ${(100 - splitPct).toFixed(2)}% 0 0)`;
+        stage.setAttribute('aria-valuenow', Math.round(splitPct));
+      }
+
+      function loadCase(key) {
+        const d = CASES[key] || CASES.aral;
+        document.getElementById('sat-title').textContent = d.title;
+        document.getElementById('sat-label-before').textContent = d.beforeLabel;
+        document.getElementById('sat-label-after').textContent = d.afterLabel;
+        document.getElementById('sat-summary').textContent = d.summary;
+        document.getElementById('sat-m1').textContent = d.m1;
+        document.getElementById('sat-m2').textContent = d.m2;
+        document.getElementById('sat-m3').textContent = d.m3;
+        beforeImg.src = d.beforeImg;
+        afterImg.src = d.afterImg;
+      }
+
+      tabs.addEventListener('click', (e) => {
+        const btn = e.target.closest('[data-case]');
+        if (!btn) return;
+        tabs.querySelectorAll('.preset-btn').forEach((b) => b.classList.toggle('active', b === btn));
+        loadCase(btn.dataset.case);
+      });
+
+      let dragging = false;
+      function updateFromPointer(clientX) {
+        const r = stage.getBoundingClientRect();
+        applySplit(((clientX - r.left) / r.width) * 100);
+      }
+      stage.addEventListener('pointerdown', (e) => { dragging = true; stage.setPointerCapture(e.pointerId); updateFromPointer(e.clientX); });
+      stage.addEventListener('pointermove', (e) => { if (dragging) updateFromPointer(e.clientX); });
+      stage.addEventListener('pointerup', () => { dragging = false; });
+      stage.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowLeft') applySplit(splitPct - 4);
+        if (e.key === 'ArrowRight') applySplit(splitPct + 4);
+      });
+
+      loadCase('aral');
+      applySplit(50);
+
+      // Load ?q= deep link if navigated from Page 2
+      const q = new URLSearchParams(window.location.search).get('q');
+      if (q) {
+        const input = document.getElementById('nasa-search-input');
+        const form = document.getElementById('nasa-search-form');
+        if (input && form) {
+          input.value = q;
+          setTimeout(() => form.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true })), 150);
+        }
+      }
+    })();
+  </script>
+</body>
+</html>

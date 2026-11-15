@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>COSMIC RELICS &amp; 3D PLUME SIMULATOR // PLANETARY FOOTPRINT</title>
+  <meta name="description" content="Explore 13 cataloged NSSDCA cosmic relics with NASA photography and test Artemis Accords Section 9 regolith plumes in 3D." />
+
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+      }
+    }
+  </script>
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <header class="sys-header is-scrolled" id="sys-header">
+    <div class="sys-header__inner page-container">
+      <a href="index.html" class="sys-header__brand">
+        <span class="signal-led signal-led--orange"></span>
+        <span class="sys-code">PLANETARY FOOTPRINT</span>
+      </a>
+
+      <nav class="sys-header__nav" aria-label="Site Pages">
+        <a href="index.html" class="sys-nav-link">01 // 3D Telemetry</a>
+        <a href="relics.html" class="sys-nav-link active">02 // Cosmic Relics &amp; Plume 3D</a>
+        <a href="observatory.html" class="sys-nav-link">03 // Earth Scars Observatory</a>
+      </nav>
+
+      <div class="sys-header__clock">
+        <span class="mono-dim">UTC</span>
+        <span id="utc-readout" class="mono-bright">00:00:00.0</span>
+      </div>
+    </div>
+    <div id="scroll-progress" class="scroll-progress" aria-hidden="true"></div>
+  </header>
+
+  <main class="page-container main-stack page-sub-top">
+    <!-- SUBPAGE COMPACT TITLE -->
+    <section class="subhero">
+      <div>
+        <span class="sector-index">PAGE 02 // PLANETARY ARCHAEOLOGY &amp; HERITAGE PROTECTION</span>
+        <h1 class="subhero-title">Cosmic Relics &amp; 3D Plume Simulator</h1>
+      </div>
+      <div class="subhero-actions">
+        <a href="#sector-artemis" class="btn-cinema btn-cinema--primary">3D Plume Simulator &darr;</a>
+        <a href="observatory.html" class="btn-cinema btn-cinema--ghost">Page 03: Earth Scars &rarr;</a>
+      </div>
+    </section>
+
+    <!-- SECTOR 02: NSSDCA RELIC CARDS WITH NASA PHOTOGRAPHY -->
+    <section id="sector-nssdca" class="sector-block reveal-on-scroll is-visible">
+      <div class="sector-header">
+        <div class="sector-header__left">
+          <span class="sector-index">[NSSDCA.GSFC.NASA.GOV ARCHIVE]</span>
+          <h2 class="sector-title">COSMIC RELICS &amp; RESTING SITES</h2>
+        </div>
+
+        <div class="filter-bar" id="nssdca-filter-bar" role="group" aria-label="Filter NSSDCA Relics by Domain">
+          <button type="button" class="filter-btn active" data-domain="all">ALL (13)</button>
+          <button type="button" class="filter-btn" data-domain="moon">MOON (4)</button>
+          <button type="button" class="filter-btn" data-domain="mars">MARS (5)</button>
+          <button type="button" class="filter-btn" data-domain="deepspace">DEEP SPACE (4)</button>
+        </div>
+      </div>
+
+      <div class="nssdca-grid" id="nssdca-cards-container"></div>
+    </section>
+
+    <!-- SECTOR 03: 3D ARTEMIS PLUME SIMULATOR -->
+    <section id="sector-artemis" class="sector-block reveal-on-scroll">
+      <div class="sector-header">
+        <div class="sector-header__left">
+          <span class="sector-index">[ARTEMIS ACCORDS SECTION 9]</span>
+          <h2 class="sector-title">3D REGOLITH PLUME SIMULATOR</h2>
+        </div>
+        <div class="filter-bar" id="artemis-body-switch">
+          <button type="button" class="filter-btn active" data-surface="moon">LUNA TERRAIN (3.5 KM/PX)</button>
+          <button type="button" class="filter-btn" data-surface="mars">MARS TERRAIN (6.8 KM/PX)</button>
+        </div>
+      </div>
+
+      <div class="artemis-layout">
+        <div class="artemis-map-cell">
+          <div class="viewport-toolbar">
+            <div class="toolbar-title">
+              <span class="signal-led signal-led--orange"></span>
+              <span id="artemis-map-title">3D DESCENT TARGETING // CLICK TERRAIN TO TEST LANDING</span>
+            </div>
+            <div class="toolbar-actions">
+              <button type="button" id="sim-apollo12-case" class="micro-action micro-action--alert">REPLAY 1969 BREACH</button>
+              <button type="button" id="sim-safe-case" class="micro-action">COMPLIANT VECTOR (&ge;80 KM)</button>
+            </div>
+          </div>
+
+          <div class="tactical-canvas-wrap" id="artemis-3d-wrap">
+            <canvas id="artemis-canvas" width="920" height="500"></canvas>
+            <canvas id="artemis-3d-canvas"></canvas>
+            <div id="artemis-3d-labels" class="artemis-3d-labels" aria-hidden="true"></div>
+          </div>
+
+          <div class="viewport-footer">
+            <span id="artemis-cursor-readout">CLICK 3D TERRAIN TO DEPLOY LANDER · RIGHT-DRAG TO TILT</span>
+            <span>CORE: 2.0 KM // PLUME ENVELOPE: 80.0 KM</span>
+          </div>
+        </div>
+
+        <aside class="artemis-hud-cell">
+          <div class="hud-block">
+            <span class="cell-index">COMPLIANCE VERDICT</span>
+            <div id="artemis-verdict-box" class="verdict-banner verdict-banner--ok">
+              <div class="verdict-title" id="artemis-verdict-title">APPROVED // HERITAGE SAFE</div>
+              <p class="verdict-text" id="artemis-verdict-text">Proposed coordinates maintain safe standoff from cataloged relics.</p>
+            </div>
+          </div>
+
+          <div class="hud-metrics-grid">
+            <div class="hud-metric">
+              <span class="mono-dim">LANDING COORDS</span>
+              <span class="mono-bright" id="artemis-latlon">14.20° N, 18.50° W</span>
+            </div>
+            <div class="hud-metric">
+              <span class="mono-dim">NEAREST RELIC</span>
+              <span class="mono-orange" id="artemis-nearest-relic">Apollo 12 / Surveyor 3</span>
+            </div>
+            <div class="hud-metric">
+              <span class="mono-dim">STANDOFF</span>
+              <span class="mono-bright" id="artemis-standoff-km">245.0 km</span>
+            </div>
+            <div class="hud-metric">
+              <span class="mono-dim">EJECTA VELOCITY</span>
+              <span class="mono-bright" id="artemis-plume-vel">2,420 m/s</span>
+            </div>
+          </div>
+
+          <div class="hud-block hud-precedent-visual">
+            <div class="precedent-thumb" id="surveyor-precedent-thumb">
+              <span class="precedent-badge">1969 PRECEDENT · NSSDCA 1967-035A</span>
+            </div>
+            <p class="hud-historical-copy">Apollo 12 landed 160 m from Surveyor 3, sandblasting its camera housing with supersonic regolith.</p>
+          </div>
+
+          <div class="hud-block">
+            <span class="cell-index">ARTIFACT PROXIMITY</span>
+            <table class="tactical-table">
+              <thead>
+                <tr><th>NSSDCA</th><th>SITE</th><th>DIST</th></tr>
+              </thead>
+              <tbody id="artemis-matrix-body"></tbody>
+            </table>
+          </div>
+        </aside>
+      </div>
+    </section>
+  </main>
+
+  <footer class="sys-footer">
+    <div class="page-container sys-footer__inner">
+      <div class="sys-footer__cell">
+        <div class="sys-code">PLANETARY FOOTPRINT ATLAS</div>
+        <p class="footer-note">NSSDCA Master Archive · Three.js 3D Lunar/Martian Plume Simulator</p>
+      </div>
+      <div class="sys-footer__links">
+        <a href="index.html">01 TELEMETRY</a>
+        <a href="relics.html">02 COSMIC RELICS</a>
+        <a href="observatory.html">03 EARTH SCARS</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Hidden DOM compat shim for Pages 1 & 3 elements expected by app.js -->
+  <div hidden aria-hidden="true">
+    <span id="live-voyager-au"></span>
+    <span id="eyes-active-label"></span>
+    <a id="eyes-external-link"></a>
+    <div id="eyes-preset-strip"></div>
+    <iframe id="nasa-eyes-iframe"></iframe>
+    <span id="glb-active-label"></span>
+    <a id="glb-source-link"></a>
+    <div id="glb-preset-strip"></div>
+    <div id="nasa-model-viewer"></div>
+    <span id="glb-description"></span>
+    <span id="scar-active-title"></span>
+    <div id="scar-selector"></div>
+    <div id="scar-stage"></div>
+    <canvas id="scar-canvas" width="880" height="460"></canvas>
+    <div id="scar-divider"></div>
+    <div id="scar-metrics-row"></div>
+    <span id="api-status-badge"></span>
+    <form id="nasa-search-form"><input id="nasa-search-input" /></form>
+    <div id="api-quick-tags"></div>
+    <div id="nasa-api-results"></div>
+  </div>
+
+  <script src="app.js"></script>
+  <script type="module">
+    import * as THREE from 'three';
+    import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+
+    const progressBar = document.getElementById('scroll-progress');
+    window.addEventListener('scroll', () => {
+      const docH = document.documentElement.scrollHeight - window.innerHeight;
+      if (progressBar) progressBar.style.width = (docH > 0 ? Math.min(100, (window.scrollY / docH) * 100) : 0).toFixed(2) + '%';
+    }, { passive: true });
+
+    if ('IntersectionObserver' in window) {
+      const revObs = new IntersectionObserver((entries, obs) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) { e.target.classList.add('is-visible'); obs.unobserve(e.target); }
+        });
+      }, { threshold: 0.08 });
+      document.querySelectorAll('.reveal-on-scroll').forEach((el) => revObs.observe(el));
+    }
+
+    const nasaImageCache = new Map();
+    async function fetchNasaThumb(query) {
+      if (nasaImageCache.has(query)) return nasaImageCache.get(query);
+      const p = fetch(`https://images-api.nasa.gov/search?q=${encodeURIComponent(query)}&media_type=image&page_size=4`)
+        .then((r) => (r.ok ? r.json() : null))
+        .then((data) => {
+          for (const item of data?.collection?.items || []) {
+            const href = item?.links?.find((l) => l.rel === 'preview' || l.render === 'image')?.href;
+            if (href) return href;
+          }
+          return null;
+        }).catch(() => null);
+      nasaImageCache.set(query, p);
+      return p;
+    }
+
+    // Enrich NSSDCA Cards with real NASA Photos + connect cross-page buttons
+    const grid = document.getElementById('nssdca-cards-container');
+    if (grid) {
+      const processCards = () => {
+        grid.querySelectorAll('.nssdca-card').forEach(async (card, idx) => {
+          if (card.dataset.visualEnhanced === '1') return;
+          card.dataset.visualEnhanced = '1';
+          card.classList.add('card-animate-ready');
+          card.style.setProperty('--stagger', Math.min(idx, 10));
+          requestAnimationFrame(() => requestAnimationFrame(() => card.classList.add('card-animate-in')));
+
+          const rawTitle = card.querySelector('.nssdca-title')?.textContent?.trim() || 'Spacecraft';
+          const idBadge = card.querySelector('.nssdca-id-badge')?.textContent?.trim() || '';
+          const domainTag = card.querySelector('.nssdca-domain-tag')?.textContent?.trim() || '';
+          const cleanQuery = rawTitle.split('(')[0].replace(/&.*$/, '').trim();
+
+          const mediaBox = document.createElement('div');
+          mediaBox.className = 'nssdca-card__media';
+          mediaBox.innerHTML = `
+            <div class="nssdca-media-overlay">
+              <span class="nssdca-id-badge">${idBadge}</span>
+              <span class="nssdca-domain-tag">${domainTag}</span>
+            </div>`;
+          card.prepend(mediaBox);
+          const oldTop = card.querySelector('.nssdca-card__top');
+          if (oldTop) oldTop.style.display = 'none';
+
+          const thumb = await fetchNasaThumb(cleanQuery);
+          if (thumb) {
+            const img = document.createElement('img');
+            img.src = thumb;
+            img.alt = rawTitle;
+            img.loading = 'lazy';
+            img.onload = () => img.classList.add('is-loaded');
+            mediaBox.prepend(img);
+          }
+        });
+      };
+      processCards();
+      new MutationObserver(processCards).observe(grid, { childList: true });
+
+      // Redirect cross-page actions cleanly to Page 1 (NASA Eyes) & Page 3 (NASA Photos)
+      grid.addEventListener('click', (e) => {
+        const btn = e.target.closest('button');
+        if (!btn) return;
+        const txt = btn.textContent.toUpperCase();
+        if (txt.includes('EYES')) {
+          setTimeout(() => {
+            const src = document.getElementById('nasa-eyes-iframe')?.src;
+            if (src) window.location.href = `index.html?eyes=${encodeURIComponent(src)}#sector-eyes`;
+          }, 40);
+        } else if (txt.includes('PHOTO')) {
+          setTimeout(() => {
+            const q = document.getElementById('nasa-search-input')?.value;
+            if (q) window.location.href = `observatory.html?q=${encodeURIComponent(q)}#nasa-archive`;
+          }, 40);
+        }
+      });
+    }
+
+    // 3D Artemis Accords Terrain + NASA Apollo LM GLB + Plume Simulator
+    (function initArtemis3D() {
+      const wrap = document.getElementById('artemis-3d-wrap');
+      const logicCanvas = document.getElementById('artemis-canvas');
+      const glCanvas = document.getElementById('artemis-3d-canvas');
+      const labelsWrap = document.getElementById('artemis-3d-labels');
+      if (!wrap || !logicCanvas || !glCanvas) return;
+
+      const renderer = new THREE.WebGLRenderer({ canvas: glCanvas, antialias: true });
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+
+      const scene = new THREE.Scene();
+      scene.background = new THREE.Color(0x05070a);
+      scene.fog = new THREE.FogExp2(0x05070a, 0.005);
+
+      const camera = new THREE.PerspectiveCamera(42, 920 / 500, 0.5, 400);
+      const resize = () => {
+        renderer.setSize(wrap.clientWidth, wrap.clientHeight, false);
+        camera.aspect = wrap.clientWidth / Math.max(1, wrap.clientHeight);
+        camera.updateProjectionMatrix();
+      };
+      resize();
+      window.addEventListener('resize', resize);
+
+      const sun = new THREE.DirectionalLight(0xfff2de, 2.5);
+      sun.position.set(45, 55, 25);
+      scene.add(sun);
+      const rim = new THREE.DirectionalLight(0x2e6bff, 0.75);
+      rim.position.set(-40, 20, -35);
+      scene.add(rim);
+      scene.add(new THREE.AmbientLight(0x28303c, 0.85));
+
+      const MAP_W = 110, MAP_D = 60;
+      const craters = [
+        { x: -34, z: -12, r: 11, d: 3.0 }, { x: 18, z: -16, r: 14, d: 3.6 },
+        { x: -12, z: 14, r: 9, d: 2.5 }, { x: 35, z: 10, r: 12, d: 3.2 },
+        { x: 4, z: 0, r: 7, d: 1.8 }, { x: -42, z: 16, r: 8, d: 2.2 }
+      ];
+      function terrainHeight(x, z) {
+        let h = Math.sin(x * 0.09) * Math.cos(z * 0.11) * 1.1 + Math.sin(x * 0.23 + z * 0.19) * 0.35;
+        for (const c of craters) {
+          const dist = Math.hypot(x - c.x, z - c.z);
+          if (dist < c.r * 1.4) {
+            const norm = dist / c.r;
+            h += norm < 1 ? -(1 - norm * norm) * c.d : (1 - (norm - 1) / 0.4) * c.d * 0.25;
+          }
+        }
+        return h;
+      }
+
+      const terrainGeo = new THREE.PlaneGeometry(MAP_W, MAP_D, 128, 72);
+      terrainGeo.rotateX(-Math.PI / 2);
+      const posAttr = terrainGeo.attributes.position;
+      for (let i = 0; i < posAttr.count; i++) posAttr.setY(i, terrainHeight(posAttr.getX(i), posAttr.getZ(i)));
+      terrainGeo.computeVertexNormals();
+
+      const moonMat = new THREE.MeshStandardMaterial({ color: 0x626873, roughness: 0.94, metalness: 0.05 });
+      const marsMat = new THREE.MeshStandardMaterial({ color: 0x9b4d2b, roughness: 0.92, metalness: 0.04 });
+      const terrainMesh = new THREE.Mesh(terrainGeo, moonMat);
+      scene.add(terrainMesh);
+
+      const gridHelper = new THREE.GridHelper(MAP_W, 22, 0x26303d, 0x151a22);
+      gridHelper.position.y = 0.25;
+      gridHelper.material.transparent = true;
+      gridHelper.material.opacity = 0.28;
+      scene.add(gridHelper);
+
+      const landerGroup = new THREE.Group();
+      const procLander = new THREE.Group();
+      const baseBody = new THREE.Mesh(new THREE.CylinderGeometry(1.4, 1.8, 1.4, 8), new THREE.MeshStandardMaterial({ color: 0xd4a438, metalness: 0.75, roughness: 0.3 }));
+      baseBody.position.y = 1.4;
+      procLander.add(baseBody);
+      const cabin = new THREE.Mesh(new THREE.CylinderGeometry(1.0, 1.25, 1.3, 6), new THREE.MeshStandardMaterial({ color: 0xc9ced6, metalness: 0.5, roughness: 0.4 }));
+      cabin.position.y = 2.65;
+      procLander.add(cabin);
+      landerGroup.add(procLander);
+
+      new GLTFLoader().load(
+        'https://raw.githubusercontent.com/nasa/NASA-3D-Resources/master/3D%20Models/Apollo%20Lunar%20Module/Apollo%20Lunar%20Module.glb',
+        (gltf) => {
+          const model = gltf.scene;
+          const size = new THREE.Box3().setFromObject(model).getSize(new THREE.Vector3());
+          model.scale.setScalar(5.2 / Math.max(size.x, size.y, size.z));
+          model.position.y = 2.2;
+          landerGroup.remove(procLander);
+          landerGroup.add(model);
+        },
+        undefined, () => {}
+      );
+
+      const plumeMat = new THREE.MeshBasicMaterial({ color: 0x00e5ff, transparent: true, opacity: 0.55, side: THREE.DoubleSide });
+      const plumeCone = new THREE.Mesh(new THREE.ConeGeometry(1.6, 5.5, 24, 1, true), plumeMat);
+      plumeCone.position.y = -1.2;
+      landerGroup.add(plumeCone);
+
+      const targetRingMat = new THREE.MeshBasicMaterial({ color: 0x00ff66, side: THREE.DoubleSide, transparent: true, opacity: 0.85 });
+      const targetRing = new THREE.Mesh(new THREE.RingGeometry(2.3, 2.7, 48), targetRingMat);
+      targetRing.rotation.x = -Math.PI / 2;
+      scene.add(targetRing);
+
+      landerGroup.position.set(-18, 6.5, 0);
+      scene.add(landerGroup);
+
+      const PARTICLE_COUNT = 220;
+      const pGeo = new THREE.BufferGeometry();
+      const pPositions = new Float32Array(PARTICLE_COUNT * 3);
+      const pAngles = Float32Array.from({ length: PARTICLE_COUNT }, () => Math.random() * Math.PI * 2);
+      const pRadii = Float32Array.from({ length: PARTICLE_COUNT }, () => Math.random() * 16);
+      const pSpeeds = Float32Array.from({ length: PARTICLE_COUNT }, () => 0.25 + Math.random() * 0.45);
+      pGeo.setAttribute('position', new THREE.BufferAttribute(pPositions, 3));
+      const pMat = new THREE.PointsMaterial({ color: 0xff8c42, size: 0.55, transparent: true, opacity: 0.85 });
+      scene.add(new THREE.Points(pGeo, pMat));
+
+      const beaconsGroup = new THREE.Group();
+      scene.add(beaconsGroup);
+      let currentBeacons = [];
+      let targetLanderPos = new THREE.Vector3(-18, 6.5, 0);
+
+      function syncFromAppJs() {
+        const lctx = logicCanvas.getContext('2d', { willReadFrequently: true });
+        if (!lctx) return;
+        const w = logicCanvas.width, h = logicCanvas.height;
+        const img = lctx.getImageData(0, 0, w, h).data;
+        const orangePts = [], targetPts = [];
+
+        for (let y = 0; y < h; y += 4) {
+          for (let x = 0; x < w; x += 4) {
+            const idx = (y * w + x) * 4;
+            const r = img[idx], g = img[idx + 1], b = img[idx + 2];
+            if (g > 180 && r < 95 && b < 150) targetPts.push({ x, y });
+            else if (r > 200 && g > 45 && g < 130 && b < 45) orangePts.push({ x, y });
+          }
+        }
+
+        const clusters = [];
+        for (const p of orangePts) {
+          const found = clusters.find((c) => Math.hypot(c.cx - p.x, c.cy - p.y) < 34);
+          if (found) { found.sx += p.x; found.sy += p.y; found.n++; found.cx = found.sx / found.n; found.cy = found.sy / found.n; }
+          else clusters.push({ sx: p.x, sy: p.y, n: 1, cx: p.x, cy: p.y });
+        }
+
+        const rowInfos = Array.from(document.querySelectorAll('#artemis-matrix-body tr')).map((tr) => ({
+          id: tr.children[0]?.textContent?.trim() || '',
+          breach: tr.classList.contains('breach-row')
+        }));
+
+        while (beaconsGroup.children.length) beaconsGroup.remove(beaconsGroup.children[0]);
+        currentBeacons = clusters.slice(0, Math.max(rowInfos.length, 5)).map((c, i) => {
+          const wp = { x: (c.cx / w - 0.5) * MAP_W, z: (c.cy / h - 0.5) * MAP_D };
+          const gy = terrainHeight(wp.x, wp.z);
+          const info = rowInfos[i] || { id: `SITE ${i + 1}`, breach: false };
+          const isViolation = document.getElementById('artemis-verdict-box')?.classList.contains('verdict-banner--violation');
+          const color = (isViolation && i === 0) || info.breach ? 0xff2a4b : 0xff6a00;
+
+          const spire = new THREE.Mesh(new THREE.CylinderGeometry(0.18, 0.35, 5.2, 12), new THREE.MeshBasicMaterial({ color }));
+          spire.position.set(wp.x, gy + 2.6, wp.z);
+          beaconsGroup.add(spire);
+
+          const ring = new THREE.Mesh(new THREE.RingGeometry(4.2, 4.6, 48), new THREE.MeshBasicMaterial({ color, transparent: true, opacity: 0.65, side: THREE.DoubleSide }));
+          ring.rotation.x = -Math.PI / 2;
+          ring.position.set(wp.x, gy + 0.45, wp.z);
+          beaconsGroup.add(ring);
+
+          return { pos: new THREE.Vector3(wp.x, gy + 5.8, wp.z), label: info.id || `SITE ${i + 1}`, breach: (isViolation && i === 0) || info.breach };
+        });
+
+        if (targetPts.length > 0) {
+          const avg = targetPts.reduce((acc, p) => ({ x: acc.x + p.x, y: acc.y + p.y }), { x: 0, y: 0 });
+          const wp = { x: ((avg.x / targetPts.length) / w - 0.5) * MAP_W, z: ((avg.y / targetPts.length) / h - 0.5) * MAP_D };
+          targetLanderPos.set(wp.x, terrainHeight(wp.x, wp.z) + 5.2, wp.z);
+        }
+
+        const isViolation = document.getElementById('artemis-verdict-box')?.classList.contains('verdict-banner--violation');
+        plumeMat.color.setHex(isViolation ? 0xff2a4b : 0x00e5ff);
+        targetRingMat.color.setHex(isViolation ? 0xff2a4b : 0x00ff66);
+        pMat.color.setHex(isViolation ? 0xff2a4b : 0xff8c42);
+      }
+
+      const raycaster = new THREE.Raycaster();
+      const pointer = new THREE.Vector2();
+      let isOrbiting = false, lastX = 0, camAzimuth = 0;
+
+      glCanvas.addEventListener('contextmenu', (e) => e.preventDefault());
+      glCanvas.addEventListener('pointerdown', (e) => {
+        if (e.button === 2 || e.shiftKey) { isOrbiting = true; lastX = e.clientX; return; }
+        const rect = glCanvas.getBoundingClientRect();
+        pointer.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+        pointer.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+        raycaster.setFromCamera(pointer, camera);
+        const hits = raycaster.intersectObject(terrainMesh);
+        if (hits.length > 0) {
+          const pt = hits[0].point;
+          const u = Math.min(0.98, Math.max(0.02, pt.x / MAP_W + 0.5));
+          const v = Math.min(0.98, Math.max(0.02, pt.z / MAP_D + 0.5));
+          targetLanderPos.set(pt.x, pt.y + 5.2, pt.z);
+          const lRect = logicCanvas.getBoundingClientRect();
+          logicCanvas.dispatchEvent(new MouseEvent('click', { clientX: lRect.left + u * lRect.width, clientY: lRect.top + v * lRect.height, bubbles: true }));
+          requestAnimationFrame(() => requestAnimationFrame(syncFromAppJs));
+        }
+      });
+      window.addEventListener('pointermove', (e) => { if (isOrbiting) { camAzimuth += (e.clientX - lastX) * 0.008; lastX = e.clientX; } });
+      window.addEventListener('pointerup', () => { isOrbiting = false; });
+
+      document.getElementById('artemis-body-switch')?.addEventListener('click', (e) => {
+        const btn = e.target.closest('[data-surface]');
+        if (!btn) return;
+        terrainMesh.material = btn.dataset.surface === 'mars' ? marsMat : moonMat;
+        setTimeout(syncFromAppJs, 80);
+      });
+      ['sim-apollo12-case', 'sim-safe-case'].forEach((id) => {
+        document.getElementById(id)?.addEventListener('click', () => {
+          setTimeout(() => {
+            syncFromAppJs();
+            if (id === 'sim-apollo12-case' && currentBeacons.length > 0) {
+              const b = currentBeacons.find((x) => x.breach) || currentBeacons[0];
+              targetLanderPos.set(b.pos.x + 1.5, terrainHeight(b.pos.x + 1.5, b.pos.z) + 5.2, b.pos.z + 1.2);
+            }
+          }, 80);
+        });
+      });
+      document.getElementById('artemis-matrix-body')?.addEventListener('click', () => setTimeout(syncFromAppJs, 80));
+
+      fetchNasaThumb('Surveyor 3 Apollo 12').then((url) => {
+        const thumb = document.getElementById('surveyor-precedent-thumb');
+        if (url && thumb) thumb.style.backgroundImage = `linear-gradient(180deg, rgba(0,0,0,0.1), rgba(0,0,0,0.85)), url("${url}")`;
+      });
+
+      setTimeout(syncFromAppJs, 250);
+
+      let t = 0;
+      function animate() {
+        requestAnimationFrame(animate);
+        t += 0.025;
+        camera.position.set(Math.sin(camAzimuth) * 88 * 0.65, 58, Math.cos(camAzimuth) * 88 * 0.76);
+        camera.lookAt(0, 0, 2);
+
+        landerGroup.position.x += (targetLanderPos.x - landerGroup.position.x) * 0.1;
+        landerGroup.position.z += (targetLanderPos.z - landerGroup.position.z) * 0.1;
+        landerGroup.position.y += (targetLanderPos.y + Math.sin(t * 2) * 0.35 - landerGroup.position.y) * 0.12;
+        landerGroup.rotation.y += 0.006;
+        plumeCone.scale.setScalar(0.92 + Math.sin(t * 9) * 0.12);
+
+        const gy = terrainHeight(landerGroup.position.x, landerGroup.position.z);
+        targetRing.position.set(landerGroup.position.x, gy + 0.4, landerGroup.position.z);
+
+        const attr = pGeo.attributes.position;
+        for (let i = 0; i < PARTICLE_COUNT; i++) {
+          pRadii[i] += pSpeeds[i];
+          if (pRadii[i] > 18) pRadii[i] = 0.5;
+          const px = landerGroup.position.x + Math.cos(pAngles[i]) * pRadii[i];
+          const pz = landerGroup.position.z + Math.sin(pAngles[i]) * pRadii[i];
+          attr.setXYZ(i, px, terrainHeight(px, pz) + 0.6 + Math.sin((pRadii[i] / 18) * Math.PI) * 1.6, pz);
+        }
+        attr.needsUpdate = true;
+
+        if (labelsWrap) {
+          const w = wrap.clientWidth, h = wrap.clientHeight, placed = [];
+          let html = '';
+          currentBeacons.forEach((b) => {
+            const p = b.pos.clone().project(camera);
+            if (p.z > 1) return;
+            const sx = (p.x * 0.5 + 0.5) * w;
+            let sy = (-p.y * 0.5 + 0.5) * h;
+            for (const prev of placed) if (Math.abs(sx - prev.x) < 105 && Math.abs(sy - prev.y) < 24) sy = prev.y - 26;
+            placed.push({ x: sx, y: sy });
+            html += `<div class="artemis-pin ${b.breach ? 'is-breach' : ''}" style="left:${sx.toFixed(1)}px;top:${sy.toFixed(1)}px;">${b.label}</div>`;
+          });
+          labelsWrap.innerHTML = html;
+        }
+        renderer.render(scene, camera);
+      }
+      animate();
+    })();
+  </script>
+</body>
+</html>
