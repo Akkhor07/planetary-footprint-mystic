@@ -159,16 +159,34 @@
     </section>
   </main>
 
-  <footer class="sys-footer">
+<footer class="sys-footer">
+    <canvas class="footer-glitter-canvas" aria-hidden="true"></canvas>
+    <div class="footer-vignette" aria-hidden="true"></div>
+
     <div class="page-container sys-footer__inner">
-      <div class="sys-footer__cell">
-        <div class="sys-code">PLANETARY FOOTPRINT</div>
-        <p class="footer-note">NSSDCA Master Archive · Three.js 3D Lunar/Martian Plume Simulator</p>
+      <div class="footer-hero-row">
+        <div class="footer-brand-block">
+          <h2 class="footer-headline">From Earth’s scars<br />to cosmic relics.</h2>
+          <a href="index.html#sector-eyes" class="btn-cinema btn-cinema--primary footer-cta">
+            Launch 3D Telemetry <span aria-hidden="true">&rsaquo;</span>
+          </a>
+        </div>
       </div>
-      <div class="sys-footer__links">
-        <a href="index.html">01 TELEMETRY</a>
-        <a href="relics.html">02 COSMIC RELICS</a>
-        <a href="observatory.html">03 EARTH SCARS</a>
+
+      <div class="footer-bottom-bar">
+        <p class="footer-copyright">
+          <svg class="copyright-logo" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <circle cx="12" cy="12" r="10"></circle>
+            <path d="M14.8 9.2a4 4 0 1 0 0 5.6"></path>
+          </svg>
+          <span>Team Mystic - NASA Space Apps Challenge 2026</span>
+        </p>
+
+        <nav class="sys-footer__links" aria-label="Footer Navigation">
+          <a href="index.html">3D Telemetry</a>
+          <a href="relics.html">Cosmic Relics &amp; Plume 3D</a>
+          <a href="observatory.html">Earth Scars Observatory</a>
+        </nav>
       </div>
     </div>
   </footer>
