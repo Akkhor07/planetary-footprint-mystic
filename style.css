@@ -216,11 +216,104 @@ button { cursor: pointer; }
 .api-item-title { font-size: 12px; font-weight: 600; color: var(--text-white); line-height: 1.4; }
 .api-item-meta { font-family: var(--font-mono); font-size: 10px; color: var(--sig-orange); }
 
-/* FOOTER */
-.sys-footer { border-top: 1px solid var(--grid-line); background-color: var(--bg-panel); padding: 40px 0; }
-.sys-footer__inner { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 24px; }
-.footer-note { font-size: 13px; color: var(--text-steel); margin-top: 6px; }
-.sys-footer__links { display: flex; flex-wrap: wrap; gap: 20px; font-family: var(--font-mono); font-size: 11px; font-weight: 600; color: var(--sig-orange); }
+/* ============================================================================
+   TERAFAB-STYLE GLITTERING BLACK & WHITE FOOTER (ALL PAGES)
+   ============================================================================ */
+.sys-footer {
+  position: relative;
+  overflow: hidden;
+  background-color: #000000;
+  border-top: 1px solid rgba(255, 255, 255, 0.14);
+  padding: 84px 0 42px;
+  min-height: 360px;
+  display: flex;
+  align-items: stretch;
+}
+
+.footer-glitter-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.footer-vignette {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background: radial-gradient(circle at 12% 55%, rgba(0, 0, 0, 0.92) 0%, rgba(0, 0, 0, 0.55) 45%, rgba(0, 0, 0, 0.08) 100%);
+}
+
+.sys-footer__inner {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 64px;
+}
+
+.footer-headline {
+  font-family: var(--font-sans);
+  font-size: clamp(2.1rem, 3.6vw, 3.2rem);
+  font-weight: 400;
+  line-height: 1.08;
+  letter-spacing: -0.03em;
+  color: #ffffff;
+  margin-bottom: 24px;
+}
+
+.footer-cta {
+  padding: 11px 22px;
+  font-size: 13.5px;
+}
+
+.footer-bottom-bar {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  padding-top: 24px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.footer-copyright {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.86);
+  letter-spacing: 0.01em;
+}
+
+.copyright-logo {
+  flex-shrink: 0;
+  color: #ffffff;
+}
+
+.sys-footer__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.62);
+}
+
+.sys-footer__links a {
+  transition: color 0.2s ease;
+}
+
+.sys-footer__links a:hover {
+  color: #ffffff;
+}
 
 @media (max-width: 1180px) {
   .hero-3d-craft { width: min(50vw, 480px); opacity: 0.72; }
