@@ -6,15 +6,6 @@
   <title>PLANETARY FOOTPRINT // 3D TELEMETRY &amp; SOLAR SYSTEM ATLAS</title>
   <meta name="description" content="3D planetary telemetry console integrating NASA Eyes WebGL, NASA 3D hardware models, cosmic relics, and Earth satellite change." />
 
-  <script type="importmap">
-    {
-      "imports": {
-        "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
-        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
-      }
-    }
-  </script>
-
   <link rel="stylesheet" href="style.css" />
   <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.5.0/model-viewer.min.js"></script>
 </head>
@@ -42,25 +33,21 @@
     <div id="scroll-progress" class="scroll-progress" aria-hidden="true"></div>
   </header>
 
-  <!-- CINEMATIC MINIMAL 3D HERO -->
+  <!-- CINEMATIC MINIMAL VIDEO HERO (MUTED) -->
   <section class="hero-stage" id="hero-stage">
-    <canvas id="hero-3d-canvas" aria-hidden="true"></canvas>
+    <video
+      id="hero-video"
+      class="hero-video"
+      autoplay
+      muted
+      loop
+      playsinline
+      preload="auto"
+      aria-hidden="true"
+    >
+      <source src="hero-video.mp4" type="video/mp4" />
+    </video>
     <div class="hero-vignette" aria-hidden="true"></div>
-
-    <div class="hero-3d-craft" aria-label="Interactive 3D Apollo Lunar Module">
-      <model-viewer
-        src="https://raw.githubusercontent.com/nasa/NASA-3D-Resources/master/3D%20Models/Apollo%20Lunar%20Module/Apollo%20Lunar%20Module.glb"
-        alt="NASA Apollo Lunar Module 3D Model"
-        auto-rotate
-        rotation-per-second="12deg"
-        camera-orbit="38deg 74deg 105%"
-        camera-controls
-        disable-zoom
-        shadow-intensity="0.8"
-        exposure="1.25"
-        interaction-prompt="none"
-      ></model-viewer>
-    </div>
 
     <div class="page-container hero-inner">
       <div class="hero-minimal">
@@ -267,137 +254,59 @@
   </div>
 
   <script src="app.js"></script>
-  <script type="module">
-    import * as THREE from 'three';
+  <script>
+    (function () {
+      const headerEl = document.getElementById('sys-header');
+      const progressBar = document.getElementById('scroll-progress');
+      const heroVideo = document.getElementById('hero-video');
+      const heroStage = document.getElementById('hero-stage');
 
-    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const headerEl = document.getElementById('sys-header');
-    const progressBar = document.getElementById('scroll-progress');
+      // Guarantee strict silent playback across all browsers
+      if (heroVideo) {
+        heroVideo.muted = true;
+        heroVideo.volume = 0;
+        const tryPlay = () => heroVideo.play().catch(() => {});
+        tryPlay();
 
-    function onScrollUpdate() {
-      const y = window.scrollY;
-      if (headerEl) headerEl.classList.toggle('is-scrolled', y > 36);
-      const docH = document.documentElement.scrollHeight - window.innerHeight;
-      if (progressBar) progressBar.style.width = (docH > 0 ? Math.min(100, (y / docH) * 100) : 0).toFixed(2) + '%';
-    }
-    window.addEventListener('scroll', onScrollUpdate, { passive: true });
-    onScrollUpdate();
-
-    // Load ?eyes= deep link if navigated from Page 2
-    const params = new URLSearchParams(window.location.search);
-    const eyesParam = params.get('eyes');
-    if (eyesParam) {
-      const iframe = document.getElementById('nasa-eyes-iframe');
-      if (iframe) iframe.src = eyesParam;
-    }
-
-    if ('IntersectionObserver' in window) {
-      const revObs = new IntersectionObserver((entries, obs) => {
-        entries.forEach((e) => {
-          if (e.isIntersecting) {
-            e.target.classList.add('is-visible');
-            obs.unobserve(e.target);
-          }
-        });
-      }, { threshold: 0.08 });
-      document.querySelectorAll('.reveal-on-scroll').forEach((el) => revObs.observe(el));
-    }
-
-    // Hero 3D Sunlit Planetary Horizon & Starfield
-    const stage = document.getElementById('hero-stage');
-    const canvas = document.getElementById('hero-3d-canvas');
-    if (stage && canvas) {
-      const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
-      const scene = new THREE.Scene();
-      const camera = new THREE.PerspectiveCamera(42, 1, 0.1, 200);
-      camera.position.set(0, 1.4, 9.5);
-
-      const resize = () => {
-        renderer.setSize(stage.clientWidth, stage.clientHeight, false);
-        camera.aspect = stage.clientWidth / Math.max(1, stage.clientHeight);
-        camera.updateProjectionMatrix();
-      };
-      resize();
-      window.addEventListener('resize', resize);
-
-      const sunLight = new THREE.DirectionalLight(0xfff1dc, 3.0);
-      sunLight.position.set(8, 6, -3);
-      scene.add(sunLight);
-
-      const fillLight = new THREE.DirectionalLight(0x2a66ff, 0.55);
-      fillLight.position.set(-7, -2, 6);
-      scene.add(fillLight);
-
-      const texCanvas = document.createElement('canvas');
-      texCanvas.width = 1024;
-      texCanvas.height = 512;
-      const tctx = texCanvas.getContext('2d');
-      tctx.fillStyle = '#1f232b';
-      tctx.fillRect(0, 0, 1024, 512);
-      for (let i = 0; i < 1600; i++) {
-        const shade = Math.floor(24 + Math.random() * 48);
-        tctx.fillStyle = `rgba(${shade},${shade + 2},${shade + 6},0.26)`;
-        tctx.beginPath();
-        tctx.arc(Math.random() * 1024, Math.random() * 512, 1 + Math.random() * 18, 0, Math.PI * 2);
-        tctx.fill();
+        // Pause video when scrolled completely out of view so WebGL below stays smooth
+        if ('IntersectionObserver' in window && heroStage) {
+          new IntersectionObserver((entries) => {
+            if (entries[0].isIntersecting) tryPlay();
+            else heroVideo.pause();
+          }, { threshold: 0.02 }).observe(heroStage);
+        }
       }
-      const planetTex = new THREE.CanvasTexture(texCanvas);
 
-      const planet = new THREE.Mesh(
-        new THREE.SphereGeometry(6.2, 64, 64),
-        new THREE.MeshStandardMaterial({ map: planetTex, bumpMap: planetTex, bumpScale: 0.08, roughness: 0.88, metalness: 0.08 })
-      );
-      planet.position.set(2.4, -5.0, -2.5);
-      scene.add(planet);
-
-      const atmo = new THREE.Mesh(
-        new THREE.SphereGeometry(6.36, 64, 64),
-        new THREE.MeshBasicMaterial({ color: 0xff6a2a, transparent: true, opacity: 0.12, side: THREE.BackSide })
-      );
-      atmo.position.copy(planet.position);
-      scene.add(atmo);
-
-      const ring = new THREE.Mesh(
-        new THREE.RingGeometry(7.2, 7.225, 128),
-        new THREE.MeshBasicMaterial({ color: 0x00e5ff, transparent: true, opacity: 0.25, side: THREE.DoubleSide })
-      );
-      ring.position.copy(planet.position);
-      ring.rotation.set(1.22, 0.35, 0);
-      scene.add(ring);
-
-      const starGeo = new THREE.BufferGeometry();
-      const starPos = new Float32Array(700 * 3);
-      for (let i = 0; i < 700; i++) {
-        starPos[i * 3] = (Math.random() - 0.5) * 60;
-        starPos[i * 3 + 1] = (Math.random() - 0.5) * 36;
-        starPos[i * 3 + 2] = -8 - Math.random() * 40;
+      function onScrollUpdate() {
+        const y = window.scrollY;
+        if (headerEl) headerEl.classList.toggle('is-scrolled', y > 36);
+        const docH = document.documentElement.scrollHeight - window.innerHeight;
+        if (progressBar) {
+          progressBar.style.width = (docH > 0 ? Math.min(100, (y / docH) * 100) : 0).toFixed(2) + '%';
+        }
       }
-      starGeo.setAttribute('position', new THREE.BufferAttribute(starPos, 3));
-      const stars = new THREE.Points(starGeo, new THREE.PointsMaterial({ color: 0xffffff, size: 0.09, transparent: true, opacity: 0.78 }));
-      scene.add(stars);
+      window.addEventListener('scroll', onScrollUpdate, { passive: true });
+      onScrollUpdate();
 
-      let mouseX = 0, mouseY = 0, active = true;
-      window.addEventListener('pointermove', (e) => {
-        if (!active) return;
-        mouseX = (e.clientX / window.innerWidth - 0.5) * 0.6;
-        mouseY = (e.clientY / window.innerHeight - 0.5) * 0.35;
-      });
-      new IntersectionObserver((entries) => { active = entries[0].isIntersecting; }, { threshold: 0.02 }).observe(stage);
-
-      function animate() {
-        requestAnimationFrame(animate);
-        if (!active) return;
-        planet.rotation.y += 0.0008;
-        stars.rotation.y += 0.00015;
-        camera.position.x += (mouseX - camera.position.x) * 0.03;
-        camera.position.y += (1.4 - mouseY - camera.position.y) * 0.03;
-        camera.lookAt(0.6, 0.2, -2.5);
-        renderer.render(scene, camera);
+      // Load ?eyes= deep link if navigated from Page 2
+      const eyesParam = new URLSearchParams(window.location.search).get('eyes');
+      if (eyesParam) {
+        const iframe = document.getElementById('nasa-eyes-iframe');
+        if (iframe) iframe.src = eyesParam;
       }
-      if (!reducedMotion) animate();
-      else renderer.render(scene, camera);
-    }
+
+      if ('IntersectionObserver' in window) {
+        const revObs = new IntersectionObserver((entries, obs) => {
+          entries.forEach((e) => {
+            if (e.isIntersecting) {
+              e.target.classList.add('is-visible');
+              obs.unobserve(e.target);
+            }
+          });
+        }, { threshold: 0.08 });
+        document.querySelectorAll('.reveal-on-scroll').forEach((el) => revObs.observe(el));
+      }
+    })();
   </script>
 </body>
 </html>
