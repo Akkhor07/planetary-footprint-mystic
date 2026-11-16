@@ -162,7 +162,7 @@
   <footer class="sys-footer">
     <div class="page-container sys-footer__inner">
       <div class="sys-footer__cell">
-        <div class="sys-code">PLANETARY FOOTPRINT ATLAS</div>
+        <div class="sys-code">PLANETARY FOOTPRINT</div>
         <p class="footer-note">NSSDCA Master Archive · Three.js 3D Lunar/Martian Plume Simulator</p>
       </div>
       <div class="sys-footer__links">
@@ -218,6 +218,8 @@
     }
 
     const nasaImageCache = new Map();
+    const nasaVideoCache = new Map();
+
     async function fetchNasaThumb(query) {
       if (nasaImageCache.has(query)) return nasaImageCache.get(query);
       const p = fetch(`https://images-api.nasa.gov/search?q=${encodeURIComponent(query)}&media_type=image&page_size=4`)
@@ -225,7 +227,7 @@
         .then((data) => {
           for (const item of data?.collection?.items || []) {
             const href = item?.links?.find((l) => l.rel === 'preview' || l.render === 'image')?.href;
-            if (href) return href;
+            if (href) return href.replace(/^http:\/\//i, 'https://');
           }
           return null;
         }).catch(() => null);
@@ -233,7 +235,53 @@
       return p;
     }
 
-    // Enrich NSSDCA Cards with real NASA Photos + connect cross-page buttons
+    function getMissionVideoQuery(title) {
+      const t = title.toLowerCase();
+      if (t.includes('lunar module')) return 'Apollo 11 Lunar Module';
+      if (t.includes('roving')) return 'Lunar Roving Vehicle Apollo';
+      if (t.includes('alsep')) return 'Apollo 11 Moon surface';
+      if (t.includes('surveyor')) return 'Surveyor Moon lander';
+      if (t.includes('sojourner') || t.includes('pathfinder')) return 'Mars Pathfinder Sojourner';
+      if (t.includes('spirit') || t.includes('opportunity')) return 'Mars Exploration Rover';
+      if (t.includes('viking')) return 'Viking Mars lander';
+      if (t.includes('perseverance') || t.includes('ingenuity')) return 'Perseverance Ingenuity Mars';
+      if (t.includes('voyager')) return 'Voyager interstellar';
+      if (t.includes('pioneer')) return 'Pioneer spacecraft';
+      if (t.includes('dawn')) return 'Dawn Ceres';
+      if (t.includes('near') || t.includes('eros')) return 'NEAR Shoemaker Eros';
+      if (t.includes('kepler')) return 'Kepler space telescope';
+      return title.split('(')[0].trim();
+    }
+
+    async function fetchNasaVideo(query) {
+      if (nasaVideoCache.has(query)) return nasaVideoCache.get(query);
+      const p = fetch(`https://images-api.nasa.gov/search?q=${encodeURIComponent(query)}&media_type=video&page_size=4`)
+        .then((r) => (r.ok ? r.json() : null))
+        .then(async (data) => {
+          const items = data?.collection?.items || [];
+          for (const item of items) {
+            const nasaId = item?.data?.[0]?.nasa_id;
+            if (!nasaId) continue;
+            const assetData = await fetch(`https://images-api.nasa.gov/asset/${encodeURIComponent(nasaId)}`)
+              .then((r) => (r.ok ? r.json() : null))
+              .catch(() => null);
+            const urls = (assetData?.collection?.items || [])
+              .map((a) => a.href)
+              .filter((u) => /\.mp4(\?|$)/i.test(u));
+            const best =
+              urls.find((u) => /~small\.mp4/i.test(u)) ||
+              urls.find((u) => /~mobile\.mp4/i.test(u)) ||
+              urls.find((u) => /~medium\.mp4/i.test(u)) ||
+              urls[0];
+            if (best) return best.replace(/^http:\/\//i, 'https://');
+          }
+          return null;
+        }).catch(() => null);
+      nasaVideoCache.set(query, p);
+      return p;
+    }
+
+    // Enrich NSSDCA Cards with real NASA Photos + Hover-to-Play NASA Mission Videos
     const grid = document.getElementById('nssdca-cards-container');
     if (grid) {
       const processCards = () => {
@@ -255,7 +303,8 @@
             <div class="nssdca-media-overlay">
               <span class="nssdca-id-badge">${idBadge}</span>
               <span class="nssdca-domain-tag">${domainTag}</span>
-            </div>`;
+            </div>
+            <span class="nssdca-video-pill">&#9654; HOVER FOR VIDEO</span>`;
           card.prepend(mediaBox);
           const oldTop = card.querySelector('.nssdca-card__top');
           if (oldTop) oldTop.style.display = 'none';
@@ -269,12 +318,64 @@
             img.onload = () => img.classList.add('is-loaded');
             mediaBox.prepend(img);
           }
+
+          let videoEl = null;
+          let loadingVideo = false;
+          const pill = mediaBox.querySelector('.nssdca-video-pill');
+
+          card.addEventListener('mouseenter', async () => {
+            card.dataset.hovering = '1';
+            if (videoEl) {
+              videoEl.play().then(() => videoEl.classList.add('is-playing')).catch(() => {});
+              if (pill) pill.textContent = 'LIVE NASA CLIP';
+              return;
+            }
+            if (loadingVideo) return;
+            loadingVideo = true;
+            if (pill) pill.textContent = 'LOADING CLIP...';
+
+            const mp4Url = await fetchNasaVideo(getMissionVideoQuery(rawTitle));
+            loadingVideo = false;
+            if (!mp4Url) {
+              if (pill) pill.textContent = 'ARCHIVE PHOTO';
+              return;
+            }
+
+            videoEl = document.createElement('video');
+            videoEl.className = 'nssdca-hover-video';
+            videoEl.src = mp4Url;
+            videoEl.muted = true;
+            videoEl.volume = 0;
+            videoEl.loop = true;
+            videoEl.playsInline = true;
+            videoEl.preload = 'auto';
+            mediaBox.appendChild(videoEl);
+
+            videoEl.addEventListener('canplay', () => {
+              if (card.dataset.hovering === '1') {
+                videoEl.play().then(() => {
+                  videoEl.classList.add('is-playing');
+                  if (pill) pill.textContent = 'PLAYING CLIP';
+                }).catch(() => {});
+              }
+            }, { once: true });
+          });
+
+          card.addEventListener('mouseleave', () => {
+            card.dataset.hovering = '0';
+            if (videoEl) {
+              videoEl.classList.remove('is-playing');
+              videoEl.pause();
+            }
+            if (pill && pill.textContent !== 'ARCHIVE PHOTO') {
+              pill.innerHTML = '&#9654; HOVER FOR VIDEO';
+            }
+          });
         });
       };
       processCards();
       new MutationObserver(processCards).observe(grid, { childList: true });
 
-      // Redirect cross-page actions cleanly to Page 1 (NASA Eyes) & Page 3 (NASA Photos)
       grid.addEventListener('click', (e) => {
         const btn = e.target.closest('button');
         if (!btn) return;
